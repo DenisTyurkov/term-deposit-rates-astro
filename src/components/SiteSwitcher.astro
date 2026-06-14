@@ -1,0 +1,35 @@
+---
+// Cross-site navigation bar (network switcher), mirroring the serviceLinks bar
+// in the nz-leads project (HeaderContent.tsx). Sits above the main <Nav>.
+// Static HTML only — no client JS.
+//
+// SEO note: these point to our own brand sites, so we want to pass link equity.
+// We deliberately DO NOT add rel="nofollow"/"sponsored"/"ugc" (those would
+// withhold juice). We also drop "noreferrer" so the Referer header flows through
+// for cross-site analytics attribution; "noopener" stays for security only (no
+// SEO/referrer impact).
+const serviceLinks: { label: string; url: string; current?: boolean }[] = [
+  { label: "Term Deposit Rates", url: "/", current: true },
+  { label: "Compare Broadband", url: "https://www.broadband.co.nz/compare" },
+  { label: "Mobile Plans", url: "https://www.mobileplan.co.nz" },
+];
+---
+<div class="border-b border-gray-200 bg-gray-50">
+  <div class="max-w-7xl mx-auto flex items-center gap-4 px-4 py-2 text-xs sm:text-sm">
+    {
+      serviceLinks.map((link) => {
+        const isExternal = /^https?:\/\//i.test(link.url);
+        return (
+          <a
+            href={link.url}
+            class={link.current ? "font-semibold text-gray-900" : "text-gray-500 hover:text-gray-800"}
+            aria-current={link.current ? "page" : undefined}
+            {...(isExternal ? { target: "_blank", rel: "noopener" } : {})}
+          >
+            {link.label}
+          </a>
+        );
+      })
+    }
+  </div>
+</div>

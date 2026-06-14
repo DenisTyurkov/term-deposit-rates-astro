@@ -1,0 +1,139 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BankLogoStrip from "../components/BankLogoStrip.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYear, monthYearShort, dayMonthYear } from "../lib/format";
+import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { seniorsFaqItems } from "../lib/faq";
+
+const data = matrixPageData({ rateType: "regular" });
+const parents = logoStripParents(data.rates);
+const stats = data.stats;
+const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
+const updatedDayMonthYear = data.latestScrapeAt ? dayMonthYear(data.latestScrapeAt) : "";
+const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
+
+const pageUrl = `${ROOT_URL}/term-deposit-rates-for-seniors/`;
+const title = `Term Deposit Rates for Seniors NZ ${monthLabel} — Compare the Best Rates`;
+const description =
+  "Compare the best term deposit (fixed deposit) rates for seniors and retirees across every major NZ bank. See standard published rates, choose monthly interest for income, and ask each bank about seniors offers. Updated daily.";
+
+const faqItems = seniorsFaqItems();
+
+const jsonLd = [
+  collectionPageSchema(
+    "Term Deposit Rates for Seniors in New Zealand",
+    "Compare term deposit rates for seniors and retirees from major New Zealand banks",
+    pageUrl,
+    data.latestScrapeAt
+  ),
+  itemListSchema(data.rates, "Term Deposit Rates for Seniors", pageUrl),
+  faqSchema(faqItems),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "Rates for Seniors", url: pageUrl },
+];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Term Deposit Rates for Seniors in New Zealand</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare the best term deposit (fixed deposit) interest rates for seniors and retirees
+          from every major NZ bank. Updated daily to help you secure dependable, predictable returns.
+        </p>
+      </div>
+      <BankLogoStrip parents={parents} />
+    </div>
+  </div>
+
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="Current Term Deposit Rates"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Term Deposits for Seniors and Retirees: A Practical Guide</h2>
+
+        <p class="text-lg text-gray-600 mb-6">
+          Term deposits are one of the most popular savings choices for New Zealand seniors and
+          retirees. They offer a fixed, guaranteed return with no exposure to share or property
+          market swings — useful when you're drawing on savings rather than building them. As of
+          {updatedMonthYear} we track rates from {stats.bankCount} institutions across {stats.termCount}
+          terms, ranging from {stats.minRate.toFixed(2)}% to {stats.maxRate.toFixed(2)}%.
+        </p>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h3 class="font-semibold text-blue-900 mb-2">Is there a special "seniors" term deposit rate?</h3>
+          <p class="text-sm text-blue-800">
+            Mostly, no. Most NZ banks publish a single term deposit rate available to everyone,
+            regardless of age — so the smartest move is to compare every bank's standard rate (the
+            table above) and then ask your bank whether any seniors, retiree or over-65 offer applies.
+            A higher standard rate elsewhere usually beats a small loyalty bonus.
+          </p>
+        </div>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Why term deposits suit many retirees</h3>
+        <p class="text-gray-600 mb-4"><strong>Certainty of return:</strong> your rate is locked in for the whole term, so you know exactly what you'll earn — helpful for budgeting in retirement.</p>
+        <p class="text-gray-600 mb-4"><strong>Capital stability:</strong> your principal isn't subject to market movements, unlike shares or managed funds.</p>
+        <p class="text-gray-600 mb-4"><strong>Regular income option:</strong> most banks let you take interest monthly or quarterly instead of at maturity, turning a deposit into a steady income stream.</p>
+        <p class="text-gray-600 mb-4"><strong>Simplicity:</strong> term deposits (also called fixed deposits) are easy to understand, with no ongoing management fees.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Choosing interest payments for income</h3>
+        <p class="text-gray-600 mb-4">
+          If you rely on your savings for living costs, choosing monthly interest payments can provide
+          a predictable top-up to NZ Super. Taking interest regularly slightly reduces the benefit of
+          compounding compared with leaving it until maturity, so weigh income needs against total return.
+          Our <a href="/term-deposit-calculator" class="text-blue-600 hover:text-blue-800 underline">term deposit calculator</a>
+          lets you compare both options side by side.
+        </p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Laddering for income and flexibility</h3>
+        <p class="text-gray-600 mb-4">
+          Many retirees split their savings across several deposits maturing at different times — a
+          "ladder". This gives you regular access to a portion of your funds without breaking a deposit
+          early, while keeping the rest earning competitive rates. Compare
+          <a href="/short-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">short-term</a> and
+          <a href="/long-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">long-term</a> rates
+          to build a ladder that matches your cash-flow needs.
+        </p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Tax and your PIR</h3>
+        <p class="text-gray-600 mb-4">
+          Term deposit interest is taxable income and Resident Withholding Tax is deducted at the rate
+          linked to your IRD number. If you're on a higher tax rate, a
+          <a href="/pie-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">PIE term deposit</a>
+          (taxed at your Prescribed Investor Rate, capped at 28%) can improve your after-tax return.
+          Check current IRD guidance or talk to a tax adviser about what's right for you.
+        </p>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 mt-8">
+          <p class="text-xs text-gray-500">
+            <strong>Disclaimer:</strong> This information is for educational purposes only and is not
+            financial advice. The rates shown are standard published rates updated {updatedDayMonthYear};
+            seniors-specific offers, eligibility and conditions vary by bank. Always verify current rates
+            and terms directly with the institution and consider professional advice for your circumstances.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Faq items={faqItems} heading="Term Deposits for Seniors — FAQs" />
+
+  <RelatedLinks exclude="/term-deposit-rates-for-seniors" />
+</Layout>

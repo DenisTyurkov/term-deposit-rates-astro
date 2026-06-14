@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import BankLogo from "../components/BankLogo.astro";
 import { logoFor } from "../lib/logos";
 import { matrixPageData, logoStripParents } from "../lib/rates";
@@ -45,9 +46,9 @@ const bankMax = (name: string) => {
 const half = Math.ceil(data.banks.length / 2);
 const bankGroups = [data.banks.slice(0, half), data.banks.slice(half)];
 
-const title = `Term Deposit Rates — Compare Bank Interest Rates | ${monthYearShort(data.latestScrapeAt ?? new Date().toISOString())}`;
-const description =
-  "Live NZ term-deposit interest rates from ANZ, ASB, BNZ and more. Updated daily.";
+const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
+const title = `Best Term Deposit Rates NZ ${monthLabel} — Compare & Find the Highest Rates`;
+const description = `Compare the best term deposit (fixed deposit) rates from every major NZ bank — ANZ, ASB, BNZ, Westpac, Kiwibank and more. Find the highest interest rate for your term, from ${stats.minRate.toFixed(2)}% to ${stats.maxRate.toFixed(2)}%. Updated daily.`;
 
 const jsonLd = [
   faqSchema(homepageFaqItems),
@@ -59,10 +60,10 @@ const jsonLd = [
   <div class="bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8">
       <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">New Zealand Term Deposit Rates</h1>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Best Term Deposit Rates in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare the latest term deposit interest rates from major NZ banks. <br />
-          Updated daily to help you find the best rates for your savings.
+          Compare the highest term deposit (fixed deposit) interest rates from every major NZ bank. <br />
+          Updated daily to help you find the best rate for your savings.
         </p>
       </div>
       <BankLogoStrip parents={parents} />
@@ -308,4 +309,6 @@ const jsonLd = [
       </div>
     </div>
   </div>
+
+  <RelatedLinks exclude="/" />
 </Layout>

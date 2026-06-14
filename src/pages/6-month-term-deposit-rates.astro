@@ -1,0 +1,97 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BankLogoStrip from "../components/BankLogoStrip.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYear, monthYearShort } from "../lib/format";
+import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { termLengthFaqItems } from "../lib/faq";
+
+const TERM = ["6 months"];
+const data = matrixPageData({ rateType: "regular", termLengths: TERM });
+const parents = logoStripParents(data.rates);
+const stats = data.stats;
+const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
+const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
+
+const pageUrl = `${ROOT_URL}/6-month-term-deposit-rates/`;
+const title = `Best 6 Month Term Deposit Rates NZ ${monthLabel} — Compare All Banks`;
+const description =
+  "Compare the best 6 month term deposit (fixed deposit) rates across every major New Zealand bank. Find the highest 6-month rate for short-term savings. Updated daily.";
+
+const faqItems = termLengthFaqItems("6-month");
+
+const jsonLd = [
+  collectionPageSchema(
+    "6 Month Term Deposit Rates New Zealand",
+    "Compare 6 month term deposit rates from major New Zealand banks",
+    pageUrl,
+    data.latestScrapeAt
+  ),
+  itemListSchema(data.rates, "6 Month Term Deposit Rates", pageUrl),
+  faqSchema(faqItems),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "6-Month Rates", url: pageUrl },
+];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Best 6 Month Term Deposit Rates in New Zealand</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare 6 month term deposit (fixed deposit) rates from every major NZ bank, ranked highest first.
+          Updated daily — a popular term for short-term savings goals.
+        </p>
+      </div>
+      <BankLogoStrip parents={parents} />
+    </div>
+  </div>
+
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="6 Month Term Deposit Rates"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">6 Month Term Deposits: Short Commitment, Competitive Returns</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          The 6 month term deposit is one of New Zealand's most popular terms — long enough to earn a
+          competitive fixed rate, short enough that your money isn't tied up for years. As of
+          {updatedMonthYear}, 6-month rates from the banks we track range from {stats.minRate.toFixed(2)}%
+          to {stats.maxRate.toFixed(2)}%.
+        </p>
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">When a 6 month term makes sense</h3>
+        <p class="text-gray-600 mb-4">A 6-month deposit suits money you'll want back within the year — a near-term purchase, a buffer between investments, or savings you want to keep relatively flexible while still beating an everyday savings account. Because the term is short, you can re-price your money sooner if rates are rising.</p>
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">6 month vs 12 month rates</h3>
+        <p class="text-gray-600 mb-4">
+          Whether 6-month rates beat <a href="/12-month-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">12-month rates</a>
+          depends on the rate cycle. When rates are expected to fall, banks often pay more for longer terms; when
+          rates are rising, shorter terms can be more attractive. Compare both, and see the full
+          <a href="/short-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">short-term range</a> before deciding.
+        </p>
+        <p class="text-gray-600 mb-4">
+          Use our <a href="/term-deposit-calculator" class="text-blue-600 hover:text-blue-800 underline">term deposit calculator</a>
+          to estimate exactly what a 6-month deposit would earn at today's rates.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <Faq items={faqItems} heading="6 Month Term Deposit FAQs" />
+
+  <RelatedLinks exclude="/6-month-term-deposit-rates" />
+</Layout>

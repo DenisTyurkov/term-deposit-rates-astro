@@ -4,18 +4,23 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import { matrixPageData, logoStripParents } from "../lib/rates";
 import { monthYearShort } from "../lib/format";
-import { collectionPageSchema, itemListSchema, ROOT_URL } from "../lib/schema";
+import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { longTermFaqItems } from "../lib/faq";
 
 const LONG_TERMS = ["18 mths", "2 years", "3 years", "4 years", "5 years"];
 const data = matrixPageData({ rateType: "regular", termLengths: LONG_TERMS });
 const parents = logoStripParents(data.rates);
 
-const pageUrl = `${ROOT_URL}/long-term-deposit-rates`;
-const title = `Long-Term Deposit Rates NZ | Compare ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""}`;
+const pageUrl = `${ROOT_URL}/long-term-deposit-rates/`;
+const title = `Best Long-Term Deposit Rates NZ ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""} — 1 to 5 Years`;
 const description =
-  "Compare long-term deposit rates (18+ months) from major New Zealand banks. Find the best rates for extended investment terms and long-term financial goals. Updated daily.";
+  "Compare the best long-term deposit (fixed deposit) rates from 1 to 5 years across major New Zealand banks. Lock in today's rate for extended investment terms. Updated daily.";
+
+const faqItems = longTermFaqItems();
 
 const jsonLd = [
   collectionPageSchema(
@@ -25,6 +30,7 @@ const jsonLd = [
     data.latestScrapeAt
   ),
   itemListSchema(data.rates, "Long-Term Term Deposit Rates", pageUrl),
+  faqSchema(faqItems),
 ];
 const breadcrumbs = [
   { name: "Home", url: `${ROOT_URL}/` },
@@ -66,4 +72,8 @@ const Content = entry ? (await render(entry)).Content : null;
       </div>
     </div>
   </div>
+
+  <Faq items={faqItems} heading="Long-Term Deposit FAQs" />
+
+  <RelatedLinks exclude="/long-term-deposit-rates" />
 </Layout>

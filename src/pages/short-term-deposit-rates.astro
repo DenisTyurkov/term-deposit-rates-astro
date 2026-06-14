@@ -4,18 +4,23 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import { matrixPageData, logoStripParents } from "../lib/rates";
 import { monthYearShort } from "../lib/format";
-import { collectionPageSchema, itemListSchema, ROOT_URL } from "../lib/schema";
+import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { shortTermFaqItems } from "../lib/faq";
 
 const SHORT_TERMS = ["1 month", "3 months", "4 months", "5 months", "6 months", "9 months", "12 mths"];
 const data = matrixPageData({ rateType: "regular", termLengths: SHORT_TERMS });
 const parents = logoStripParents(data.rates);
 
-const pageUrl = `${ROOT_URL}/short-term-deposit-rates`;
-const title = `Short-Term Deposit Rates NZ | Compare ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""}`;
+const pageUrl = `${ROOT_URL}/short-term-deposit-rates/`;
+const title = `Best Short-Term Deposit Rates NZ ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""} — 1 to 12 Months`;
 const description =
-  "Compare short-term deposit rates (3-12 months) from major New Zealand banks. Find the best rates for emergency funds and short-term savings goals. Updated daily.";
+  "Compare the best short-term deposit (fixed deposit) rates from 1 to 12 months across major New Zealand banks. Ideal for emergency funds and near-term savings goals. Updated daily.";
+
+const faqItems = shortTermFaqItems();
 
 const jsonLd = [
   collectionPageSchema(
@@ -25,6 +30,7 @@ const jsonLd = [
     data.latestScrapeAt
   ),
   itemListSchema(data.rates, "Short-Term Term Deposit Rates", pageUrl),
+  faqSchema(faqItems),
 ];
 const breadcrumbs = [
   { name: "Home", url: `${ROOT_URL}/` },
@@ -66,4 +72,8 @@ const Content = entry ? (await render(entry)).Content : null;
       </div>
     </div>
   </div>
+
+  <Faq items={faqItems} heading="Short-Term Deposit FAQs" />
+
+  <RelatedLinks exclude="/short-term-deposit-rates" />
 </Layout>

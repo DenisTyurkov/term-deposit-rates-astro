@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Static-assets-only Worker: no server code, no Astro adapter. `astro build`
+  // emits the prerendered site to ./dist (better-sqlite3 reads db/rates.db at
+  // BUILD time on Node — never at runtime), and `wrangler deploy` just uploads
+  // those files. The presence of this file stops `wrangler deploy` from
+  // auto-running `astro add cloudflare`, which would wrongly pull our
+  // build-time code into the Workers runtime and fail on `fs`/`better-sqlite3`.
+  //
+  // `name` must match the Worker created by the Git connection in the dashboard.
+  "name": "term-deposit-rates-astro",
+  "compatibility_date": "2026-06-14",
+  "assets": {
+    "directory": "./dist"
+  }
+}

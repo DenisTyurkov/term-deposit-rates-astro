@@ -1,75 +1,42 @@
 ## BNZ term deposit rates in New Zealand
 
-Bank of New Zealand (BNZ) offers a comprehensive range of term deposit rates for savers seeking predictable returns on their investments. <a href="/">Compare BNZ rates against other major banks</a> to ensure you're securing the best available returns for your investment timeframe. Our rates are updated daily to reflect current market conditions.
+BNZ (Bank of New Zealand) is one of the country's big-four banks and a full-service retail and business lender with a nationwide branch network. As part of the National Australia Bank (NAB) group, BNZ is among the oldest and most established financial institutions in New Zealand, which is one reason its term deposits are a common choice for savers wanting predictable, fixed returns. The BNZ rates listed above are refreshed daily, so you can <a href="/">compare all major NZ banks</a> side by side before committing your money.
 
 ### How to read BNZ's rates table
 
-BNZ displays term deposit information showing annual interest rates, minimum deposit requirements, and investment periods. The table includes credit rating details and various term options, from short-term deposits to longer-term investments spanning several years.
+The table above shows BNZ's published annual interest rates against each available term, alongside the minimum deposit and term length. Rates generally differ by term, and a longer fixed-term deposit will not always pay more than a shorter one — the curve depends on where markets expect rates to head. Read each row as the rate that applies for that specific period, then use our <a href="/term-deposit-calculator">term deposit calculator</a> to estimate returns for the amount and term you have in mind.
 
-### Interest payment frequency & compounding
+### Interest payment and compounding options
 
-Contact BNZ for interest payment schedules and compounding options - most New Zealand banks provide flexible interest payment arrangements including monthly, quarterly, half-yearly, annual, or at-maturity options. The timing of payments can affect your overall return.
+Most New Zealand banks, including BNZ, let you choose how often interest is paid — commonly monthly, quarterly, six-monthly, annually, or all at maturity. Taking interest at maturity can allow it to compound within the deposit, while regular payments suit savers who want an income stream. The exact options and any rate differences between them vary, so confirm the current arrangements directly with BNZ before you invest.
 
-### Minimum deposits, fees & early withdrawal
+### Minimum deposits and early withdrawal
 
-Contact BNZ for current minimum deposit thresholds and any associated charges. Term deposits typically require minimum investment amounts, and breaking deposits before maturity usually involves penalties.
+BNZ term deposits typically require a minimum opening amount, and that threshold can change over time, so check the current figure with the bank. A term deposit is designed to be held for its full term. If you need to break it early, banks usually apply conditions such as a reduced interest rate, a break adjustment, or notice requirements, and you may receive less than expected. Confirm BNZ's current minimum, any fees, and its early-withdrawal terms before locking funds away.
 
-BNZ's early withdrawal conditions may include interest rate reductions or loss of accrued interest. Contact BNZ for break fees and early access terms. Contact BNZ directly for current penalty structures.
+### What drives BNZ's rate changes
 
-### How often rates change & what typically drives changes
+BNZ reviews its term deposit rates in response to broader market conditions rather than on a fixed schedule. The main influences include:
 
-BNZ adjusts their term deposit rates based on several market factors:
+- Movements in the Reserve Bank's Official Cash Rate (OCR)
+- Competition among the major banks for retail deposits
+- The bank's own wholesale funding costs
+- Inflation expectations and the wider economic outlook
 
-- Changes to the RBNZ Official Cash Rate
-- Banking sector competition and funding costs
-- New Zealand and global economic conditions
-- Inflation expectations and monetary policy outlook
-
-BNZ, like other major banks, may update rates frequently in response to changing market conditions.
+Because these factors shift, rates can change with little notice. The table above reflects the latest figures we hold, but always confirm the live rate with BNZ before you commit.
 
 ### How BNZ compares
 
-When comparing BNZ with other New Zealand banks, consider:
+When weighing BNZ against other New Zealand banks, look beyond the headline rate:
 
-- **Rate competitiveness**: How BNZ's offers stack up across different investment terms
-- **Product range**: Variety of terms and minimum deposit options available
-- **Banking relationship**: Existing customer benefits and integrated banking services
-- **Network access**: Branch and ATM availability for your needs
-- **Financial stability**: Institution credit ratings and market position
+- **Rate competitiveness** across the specific term you want, not just the best advertised number
+- **Term range and minimums** that fit your savings goal and available funds
+- **Existing relationship** — having other BNZ accounts may make managing a deposit simpler
+- **Branch and digital access** through BNZ's nationwide network
+- **Institutional standing** as a big-four, NAB-owned bank
 
-### Risks & considerations for NZ term deposits
+Retirees and older savers comparing income options may also find our <a href="/term-deposit-rates-for-seniors">term deposit rates for seniors</a> guide useful when planning around BNZ's offers.
 
-Important considerations for any New Zealand term deposit:
+### Risks and considerations
 
-**Interest rate environment risk**: Locking in rates means missing potential increases but also protection from decreases during your investment period.
-
-**Purchasing power risk**: Inflation may erode the real value of your returns if it exceeds your deposit rate.
-
-**Liquidity constraints**: Funds remain committed for the full term, with penalties typically applying for early withdrawal.
-
-**Counterparty risk**: Contact BNZ for current New Zealand deposit insurance or guarantee arrangements. understand the protection available for your investment.
-
-**Opportunity costs**: Money in term deposits cannot be allocated to potentially higher-returning investment alternatives.
-
-### Frequently asked questions
-
-**What happens when my BNZ term deposit reaches maturity?**
-BNZ will typically contact you before maturity with options to reinvest, transfer funds, or withdraw. You can usually specify your preference in advance.
-
-**Can I add more money to my existing BNZ term deposit?**
-Term deposits are generally fixed amounts. Additional investments would require opening new, separate deposits.
-
-**How is my BNZ term deposit interest taxed in New Zealand?**
-Interest earnings are subject to Resident Withholding Tax deducted at your prescribed investor rate. Ensure BNZ has your correct PIR information.
-
-**What are the costs if I need to break my BNZ term deposit early?**
-Early withdrawal typically results in interest penalties or forfeiture. Contact BNZ for current break fee structure.
-
-**How often might BNZ change their term deposit rates?**
-Rate adjustments can occur regularly, sometimes daily, depending on market conditions and competitive factors.
-
-**Does BNZ offer different rates for larger deposits?**
-Contact BNZ for tiered rate structure for different deposit amounts - some banks offer preferential rates for larger investments.
-
-**Can I set up automatic reinvestment for my BNZ term deposit?**
-Many banks offer automatic rollover options. Check with BNZ about setting up automatic reinvestment at maturity.
+No deposit is entirely without trade-offs. Locking in a rate protects you if rates fall but means missing out if they rise. Inflation can erode the real value of your return if it outpaces your rate. Your funds stay committed for the full term, so factor in your need for access. Counterparty protection and any deposit-guarantee arrangements can change, so check the current position with BNZ. This page is general information only, not financial advice — verify all figures and terms with the bank and consider your own circumstances before investing.

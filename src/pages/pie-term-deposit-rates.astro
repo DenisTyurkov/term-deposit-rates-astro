@@ -2,9 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import { matrixPageData, logoStripParents } from "../lib/rates";
 import { monthYear, monthYearShort, dayMonthYear, delimited } from "../lib/format";
-import { itemListSchema, bankOrganizationSchema, ROOT_URL } from "../lib/schema";
+import { itemListSchema, bankOrganizationSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { pieFaqItems } from "../lib/faq";
 
 const data = matrixPageData({ rateType: "pie" });
 const parents = logoStripParents(data.rates);
@@ -26,13 +28,14 @@ const pieTermBlocks = ["3 months", "1 year", "2 years"]
   })
   .filter((b): b is { term: string; min: number; max: number; banks: number } => b !== null);
 
-const pageUrl = `${ROOT_URL}/pie-term-deposit-rates`;
-const title = `Best PIE Term Deposit Rates — Compare Bank Interest Rates | ${monthYearShort(data.latestScrapeAt ?? new Date().toISOString())}`;
+const pageUrl = `${ROOT_URL}/pie-term-deposit-rates/`;
+const title = `Best PIE Term Deposit Rates NZ ${monthYearShort(data.latestScrapeAt ?? new Date().toISOString())} — Tax-Efficient (PIR ≤ 28%)`;
 const description =
-  "Live NZ term-deposit interest rates from ANZ, ASB, BNZ and more. Updated daily.";
+  "Compare PIE term deposit rates from major NZ banks. PIE deposits are taxed at your Prescribed Investor Rate (capped at 28%) — potentially better after-tax returns than a standard fixed deposit. Updated daily.";
 
 const jsonLd = [
   itemListSchema(data.rates, "New Zealand PIE Term Deposit Rates", pageUrl),
+  faqSchema(pieFaqItems()),
   ...parents.map((p) => bankOrganizationSchema(p.name, p.slug)),
 ];
 ---
@@ -226,4 +229,6 @@ const jsonLd = [
       </div>
     </div>
   </div>
+
+  <RelatedLinks exclude="/pie-term-deposit-rates" />
 </Layout>

@@ -2,10 +2,13 @@
 import { getEntry, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import BankLogo from "../components/BankLogo.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
 import { logoFor } from "../lib/logos";
 import { allProviders, providerPageData } from "../lib/rates";
 import { pct, delimited, longDateTime, monthYearShort } from "../lib/format";
-import { bankOrganizationSchema, collectionPageSchema, itemListSchema, ROOT_URL } from "../lib/schema";
+import { bankOrganizationSchema, collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { providerFaqItems } from "../lib/faq";
 
 export async function getStaticPaths() {
   return allProviders().map((provider) => ({
@@ -18,10 +21,18 @@ const { provider } = Astro.props;
 const data = providerPageData(provider);
 const allRates = data.products.flatMap((p) => p.rates);
 
-const pageUrl = `${ROOT_URL}/${provider.slug}`;
+const pageUrl = `${ROOT_URL}/${provider.slug}/`;
 const updated = data.latestScrapeAt;
-const title = `${provider.name} Term Deposit Rates — Compare Interest Rates | ${monthYearShort(updated ?? new Date().toISOString())}`;
-const description = `Compare ${provider.name} Term Deposit Rates — Latest Interest Rates - Updated Daily.`;
+const monthLabel = monthYearShort(updated ?? new Date().toISOString());
+
+// Best current rate for this bank (drives a keyword-rich, click-worthy title).
+const topRate = allRates.length ? Math.max(...allRates.map((r) => r.interest_rate)) : null;
+const rateBlurb = topRate != null ? `up to ${pct(topRate)} ` : "";
+
+const title = `${provider.name} Term Deposit Rates ${monthLabel} — Compare ${rateBlurb}Fixed Deposit Interest`;
+const description = `Compare ${provider.name} term deposit (fixed deposit) interest rates ${rateBlurb}across all terms — for regular savers and seniors. Rates updated daily. Find the best ${provider.name} rate.`;
+
+const faqItems = providerFaqItems(provider.name);
 
 const jsonLd = [
   bankOrganizationSchema(provider.name, provider.slug),
@@ -32,6 +43,7 @@ const jsonLd = [
     updated
   ),
   itemListSchema(allRates, `${provider.name} Term Deposit Rates`, pageUrl),
+  faqSchema(faqItems),
 ];
 const breadcrumbs = [
   { name: "Home", url: `${ROOT_URL}/` },
@@ -49,8 +61,11 @@ const Content = entry ? (await render(entry)).Content : null;
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">{provider.name} Term Deposit Rates</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare the latest {provider.name} term deposit interest rates.
-          Updated daily to help you find the best rates from this provider.
+          Compare the latest {provider.name} term deposit (fixed deposit) interest rates,
+          updated daily. Estimate your returns with our
+          <a href="/term-deposit-calculator" class="text-blue-600 hover:text-blue-800 underline">term deposit calculator</a>
+          or see how {provider.name} stacks up against
+          <a href="/" class="text-blue-600 hover:text-blue-800 underline">every major NZ bank</a>.
         </p>
       </div>
 
@@ -172,4 +187,8 @@ const Content = entry ? (await render(entry)).Content : null;
       )}
     </div>
   </div>
+
+  <Faq items={faqItems} heading={`${provider.name} Term Deposit FAQs`} />
+
+  <RelatedLinks exclude={`/${provider.slug}`} />
 </Layout>

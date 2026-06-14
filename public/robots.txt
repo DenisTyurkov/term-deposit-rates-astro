@@ -1,0 +1,5 @@
+# termdepositrates.co.nz
+User-agent: *
+Allow: /
+
+Sitemap: https://www.termdepositrates.co.nz/sitemap-index.xml

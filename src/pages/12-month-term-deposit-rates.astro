@@ -1,0 +1,97 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BankLogoStrip from "../components/BankLogoStrip.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import Faq from "../components/Faq.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYear, monthYearShort } from "../lib/format";
+import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
+import { termLengthFaqItems } from "../lib/faq";
+
+const TERM = ["12 mths"];
+const data = matrixPageData({ rateType: "regular", termLengths: TERM });
+const parents = logoStripParents(data.rates);
+const stats = data.stats;
+const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
+const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
+
+const pageUrl = `${ROOT_URL}/12-month-term-deposit-rates/`;
+const title = `Best 12 Month (1 Year) Term Deposit Rates NZ ${monthLabel} — Compare All Banks`;
+const description =
+  "Compare the best 12 month (1 year) term deposit (fixed deposit) rates across every major New Zealand bank. Find the highest 1-year rate. Updated daily.";
+
+const faqItems = termLengthFaqItems("12-month");
+
+const jsonLd = [
+  collectionPageSchema(
+    "12 Month Term Deposit Rates New Zealand",
+    "Compare 12 month (1 year) term deposit rates from major New Zealand banks",
+    pageUrl,
+    data.latestScrapeAt
+  ),
+  itemListSchema(data.rates, "12 Month Term Deposit Rates", pageUrl),
+  faqSchema(faqItems),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "12-Month Rates", url: pageUrl },
+];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Best 12 Month (1 Year) Term Deposit Rates in New Zealand</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare 12 month term deposit (fixed deposit) rates from every major NZ bank, ranked highest first.
+          The 1-year term is the most popular choice for New Zealand savers. Updated daily.
+        </p>
+      </div>
+      <BankLogoStrip parents={parents} />
+    </div>
+  </div>
+
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="12 Month Term Deposit Rates"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">12 Month Term Deposits: New Zealand's Most Popular Term</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          The 12 month (1 year) term deposit is the benchmark term most New Zealanders choose. It strikes
+          a balance between a competitive fixed rate and a commitment you can plan around. As of
+          {updatedMonthYear}, 1-year rates from the banks we track range from {stats.minRate.toFixed(2)}%
+          to {stats.maxRate.toFixed(2)}%.
+        </p>
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Why the 1 year term is so popular</h3>
+        <p class="text-gray-600 mb-4">A 12-month term locks in today's rate for a full year while still returning your money within a foreseeable horizon. It's a natural fit for an annual savings goal, a lump sum you don't need immediately, or as the building block of a deposit ladder.</p>
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Should you go longer than 12 months?</h3>
+        <p class="text-gray-600 mb-4">
+          If you expect rates to fall, locking in a <a href="/long-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">longer term</a>
+          can secure today's rate for two years or more. If you want to keep your options open, a
+          <a href="/6-month-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">6-month term</a> re-prices sooner.
+          Compare across terms before committing.
+        </p>
+        <p class="text-gray-600 mb-4">
+          Estimate your 1-year return at today's rates with our
+          <a href="/term-deposit-calculator" class="text-blue-600 hover:text-blue-800 underline">term deposit calculator</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <Faq items={faqItems} heading="12 Month Term Deposit FAQs" />
+
+  <RelatedLinks exclude="/12-month-term-deposit-rates" />
+</Layout>

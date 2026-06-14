@@ -1,0 +1,50 @@
+---
+// Internal-linking block. Spreads link equity beyond the homepage/BNZ page and
+// gives crawlers contextual paths between hubs (providers ⇄ seniors ⇄ term
+// lengths ⇄ calculator ⇄ PIE). Pass an explicit list, or omit `links` to get a
+// sensible default set (the main hubs), optionally hiding the current page.
+interface Link {
+  href: string;
+  label: string;
+  description?: string;
+}
+interface Props {
+  links?: Link[];
+  heading?: string;
+  exclude?: string; // href to drop (the current page)
+}
+
+const DEFAULTS: Link[] = [
+  { href: "/", label: "Best & compare term deposit rates", description: "Every major NZ bank, ranked" },
+  { href: "/term-deposit-rates-for-seniors", label: "Rates for seniors", description: "Term deposits for retirees" },
+  { href: "/short-term-deposit-rates", label: "Short-term rates", description: "1–12 month terms" },
+  { href: "/long-term-deposit-rates", label: "Long-term rates", description: "1–5 year terms" },
+  { href: "/6-month-term-deposit-rates", label: "6-month rates", description: "Best 6-month deposits" },
+  { href: "/12-month-term-deposit-rates", label: "12-month rates", description: "Best 1-year deposits" },
+  { href: "/pie-term-deposit-rates", label: "PIE term deposits", description: "Tax-efficient (PIR ≤ 28%)" },
+  { href: "/term-deposit-calculator", label: "Term deposit calculator", description: "Estimate your returns" },
+];
+
+const { links, heading = "Explore more rates & tools", exclude } = Astro.props;
+const items = (links ?? DEFAULTS).filter((l) => l.href !== exclude);
+---
+{
+  items.length > 0 && (
+    <section class="max-w-7xl mx-auto px-4 py-8">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">{heading}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {items.map((l) => (
+            <a
+              href={l.href}
+              class="block p-3 rounded-lg border border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-colors"
+            >
+              <span class="font-medium text-blue-700">{l.label}</span>
+              {l.description && <span class="block text-sm text-gray-500 mt-0.5">{l.description}</span>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

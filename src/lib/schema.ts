@@ -98,7 +98,7 @@ export function investmentProductSchema(rate: Rate, position?: number): Json | n
     "@context": "https://schema.org",
     "@type": "InvestmentOrDeposit",
     name: `${rate.bank_name} ${rate.term_length} Term Deposit`,
-    provider: { "@id": `${ROOT}/${parameterize(rate.parent_bank_name)}#org` },
+    provider: { "@id": `${ROOT}/${parameterize(rate.parent_bank_name)}/#org` },
     interestRate: { "@type": "QuantitativeValue", value: rate.interest_rate, unitCode: "P1A" },
     termDuration: termToIso8601Duration(rate.term_length),
     areaServed: "NZ",
@@ -149,9 +149,9 @@ export function bankOrganizationSchema(bankName: string, providerSlug?: string):
   return {
     "@context": "https://schema.org",
     "@type": "BankOrCreditUnion",
-    "@id": `${ROOT}/${slug}#org`,
+    "@id": `${ROOT}/${slug}/#org`,
     name: bankName,
-    url: `${ROOT}/${slug}`,
+    url: `${ROOT}/${slug}/`,
     areaServed: { "@type": "Country", name: "New Zealand", alternateName: "NZ" },
     serviceArea: { "@type": "Country", name: "New Zealand" },
   };

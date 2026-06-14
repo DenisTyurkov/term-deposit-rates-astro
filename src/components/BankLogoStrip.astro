@@ -1,0 +1,25 @@
+---
+// Port of rates/_bank_logo_strip.html.erb
+import BankLogo from "./BankLogo.astro";
+import { logoFor } from "../lib/logos";
+
+interface Props {
+  parents: { slug: string; name: string }[];
+}
+const { parents } = Astro.props;
+---
+<div class="flex gap-4 overflow-x-auto py-4 justify-center">
+  {
+    parents.map((p) => (
+      <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+        <a href={`/${p.slug}`} class="block w-full h-full flex items-center justify-center p-2">
+          {logoFor(p.name) ? (
+            <BankLogo name={p.name} class="h-12 w-auto object-contain" />
+          ) : (
+            <span class="text-xs font-medium text-gray-600 uppercase text-center">{p.name}</span>
+          )}
+        </a>
+      </div>
+    ))
+  }
+</div>

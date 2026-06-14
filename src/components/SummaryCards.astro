@@ -1,0 +1,99 @@
+---
+// Port of rates/_summary_cards.html.erb
+import BankLogo from "./BankLogo.astro";
+import { logoFor } from "../lib/logos";
+import { pct, dayMonthYearTime } from "../lib/format";
+import type { SummaryCard } from "../lib/rates";
+
+interface Props {
+  cards: SummaryCard[];
+  latestScrapeAt: string | null;
+}
+const { cards, latestScrapeAt } = Astro.props;
+
+type Highlight = SummaryCard["highlight"];
+
+const cardBorder: Record<Highlight, string> = {
+  gold: "border-yellow-300 bg-gradient-to-r from-yellow-50 to-amber-100",
+  blue: "border-blue-300 bg-gradient-to-r from-blue-50 to-cyan-100",
+  green: "border-green-300 bg-gradient-to-r from-green-50 to-emerald-100",
+  purple: "border-purple-300 bg-gradient-to-r from-purple-50 to-indigo-100",
+};
+const rateColor: Record<Highlight, string> = {
+  gold: "text-yellow-800",
+  blue: "text-blue-800",
+  green: "text-green-800",
+  purple: "text-purple-800",
+};
+const accentBar: Record<Highlight, string> = {
+  gold: "bg-gradient-to-b from-yellow-400 to-amber-500",
+  blue: "bg-gradient-to-b from-blue-400 to-cyan-500",
+  green: "bg-gradient-to-b from-green-400 to-emerald-500",
+  purple: "bg-gradient-to-b from-purple-400 to-indigo-500",
+};
+---
+{
+  cards.length > 0 && (
+    <div class="mb-6">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="mb-3">
+          <h2 class="text-lg font-bold text-gray-900 mb-1">Best Rates Quick View</h2>
+          <p class="text-xs text-gray-600">Scan the top picks across all term lengths</p>
+        </div>
+
+        <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide summary-card-container px-6 sm:px-8 lg:px-12">
+          {cards.map((card) => (
+            <div
+              class={`summary-card bg-white rounded-lg shadow-sm border hover:shadow-md transition-all duration-200 p-4 relative overflow-hidden flex-shrink-0 w-56 ${cardBorder[card.highlight]}`}
+            >
+              {/* Top row: Icon + Title */}
+              <div class="flex items-center space-x-4 mb-3">
+                <span class="text-base flex-shrink-0">{card.icon}</span>
+                <div class="min-w-0 flex-1">
+                  <h3 class="font-bold text-gray-900 text-xs leading-tight">{card.title}</h3>
+                  <p class="text-xs text-gray-500 leading-tight mt-0.5">{card.subtitle}</p>
+                </div>
+              </div>
+
+              {/* Rate display */}
+              <div class="mb-3">
+                <div class={`text-xl font-black leading-none ${rateColor[card.highlight]}`}>
+                  {pct(card.rate)}
+                </div>
+              </div>
+
+              {/* Bank and term */}
+              <div class="flex items-start space-x-3 text-xs">
+                <div class="flex-shrink-0 mt-1">
+                  {logoFor(card.bank) ? (
+                    <div class="w-6 h-6 bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden">
+                      <BankLogo name={card.bank} class="block" style="width: 20px; height: 20px; object-fit: contain; opacity: 0.9;" />
+                    </div>
+                  ) : (
+                    <div class="w-6 h-6 bg-gray-100 rounded border border-gray-200 flex items-center justify-center">
+                      <span class="text-gray-600 font-semibold text-xs">{card.bank.slice(0, 2).toUpperCase()}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div class="flex-1 space-y-1">
+                  <div class="font-semibold text-gray-800 truncate">{card.bank}</div>
+                  <div class="text-gray-600">{card.term}</div>
+                </div>
+              </div>
+
+              {/* Left accent bar */}
+              <div class={`absolute left-0 top-0 w-1 h-full ${accentBar[card.highlight]}`} />
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-2">
+          <p class="text-xs text-gray-500">
+            Updated: {latestScrapeAt && dayMonthYearTime(latestScrapeAt)}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}

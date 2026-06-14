@@ -1,0 +1,229 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYear, monthYearShort, dayMonthYear, delimited } from "../lib/format";
+import { itemListSchema, bankOrganizationSchema, ROOT_URL } from "../lib/schema";
+
+const data = matrixPageData({ rateType: "pie" });
+const parents = logoStripParents(data.rates);
+const stats = data.stats;
+const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
+const updatedDayMonthYear = data.latestScrapeAt ? dayMonthYear(data.latestScrapeAt) : "";
+
+const pieTermBlocks = ["3 months", "1 year", "2 years"]
+  .map((term) => {
+    const tr = data.rates.filter((r) => r.term_length === term);
+    if (!tr.length) return null;
+    const interest = tr.map((r) => r.interest_rate);
+    return {
+      term,
+      min: Math.min(...interest),
+      max: Math.max(...interest),
+      banks: new Set(tr.map((r) => r.bank_name)).size,
+    };
+  })
+  .filter((b): b is { term: string; min: number; max: number; banks: number } => b !== null);
+
+const pageUrl = `${ROOT_URL}/pie-term-deposit-rates`;
+const title = `Best PIE Term Deposit Rates — Compare Bank Interest Rates | ${monthYearShort(data.latestScrapeAt ?? new Date().toISOString())}`;
+const description =
+  "Live NZ term-deposit interest rates from ANZ, ASB, BNZ and more. Updated daily.";
+
+const jsonLd = [
+  itemListSchema(data.rates, "New Zealand PIE Term Deposit Rates", pageUrl),
+  ...parents.map((p) => bankOrganizationSchema(p.name, p.slug)),
+];
+---
+<Layout title={title} description={description} jsonLd={jsonLd}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Best PIE Term Deposit Rates in New Zealand</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare PIE (Portfolio Investment Entity) term deposit rates from major NZ banks. <br />
+          Updated daily with tax-efficient investment options for your savings.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="Current PIE Rates"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <!-- Content Section -->
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Understanding PIE Term Deposits: Tax-Efficient Investing in New Zealand</h2>
+
+        <p class="text-lg text-gray-600 mb-6">
+          PIE (Portfolio Investment Entity) term deposits offer a tax-efficient alternative to traditional term deposits for many New Zealand investors.
+          As of {updatedMonthYear}, we track PIE rates from {stats.bankCount} major financial institutions
+          across {stats.termCount} different term lengths. Understanding how PIE structures work and their potential tax benefits
+          can help you make informed decisions about maximizing your after-tax returns.
+        </p>
+
+        {data.rates.length > 0 ? (
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-blue-900 mb-2">PIE Market Insights ({updatedDayMonthYear}):</h3>
+            <ul class="text-sm text-blue-800 space-y-1">
+              <li>• Current PIE rates range from <strong>{stats.minRate.toFixed(2)}%</strong> to <strong>{stats.maxRate.toFixed(2)}%</strong></li>
+              <li>• Average minimum deposit: ${stats.avgMinDeposit != null ? delimited(stats.avgMinDeposit) : ""}</li>
+              <li>• {stats.bankCount} institutions offering PIE term deposits across {stats.termCount} term lengths</li>
+            </ul>
+          </div>
+        ) : (
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-yellow-900 mb-2">PIE Rate Data Update</h3>
+            <p class="text-sm text-yellow-800">PIE rate data is currently being updated. Please check back soon for the latest PIE term deposit rates.</p>
+          </div>
+        )}
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">What Are PIE Term Deposits and How Do They Work?</h3>
+        <p class="text-gray-600 mb-4">PIE (Portfolio Investment Entity) term deposits are structured as investments in a managed fund that holds term deposits. While the underlying investment is still a term deposit with guaranteed returns, the PIE structure can provide tax advantages for many investors.</p>
+        <p class="text-gray-600 mb-4">Like traditional term deposits, PIE term deposits offer fixed interest rates for predetermined periods. However, the tax treatment differs, potentially resulting in lower effective tax rates and higher after-tax returns for eligible investors.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">PIE Tax Benefits Explained</h3>
+        <p class="text-gray-600 mb-4">The main advantage of PIE term deposits lies in their tax treatment:</p>
+        <p class="text-gray-600 mb-4"><strong>Prescribed Investor Rate (PIR)</strong>: PIEs are taxed at your PIR, which may be lower than your marginal tax rate. PIRs are capped at 28%, even if your income tax rate is 33% or 39%.</p>
+        <p class="text-gray-600 mb-4"><strong>No Additional Tax</strong>: Unlike regular term deposits where interest is added to your taxable income, PIE investments don't create additional tax obligations in your annual return.</p>
+        <p class="text-gray-600 mb-4"><strong>Tax Efficiency</strong>: For investors on higher tax rates, PIE structures can result in significant tax savings compared to traditional term deposits.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Who Benefits Most from PIE Term Deposits?</h3>
+        <p class="text-gray-600 mb-4">PIE term deposits are particularly beneficial for investors who:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Have marginal tax rates of 30%, 33%, or 39%</li>
+          <li>Want to minimize tax on their investment returns</li>
+          <li>Prefer the security of term deposits with tax efficiency</li>
+          <li>Have significant term deposit holdings</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Your PIR is determined by your income in the two preceding tax years. It's important to ensure you're on the correct PIR to maximize tax benefits.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">PIE vs Traditional Term Deposits: A Comparison</h3>
+        <div class="overflow-x-auto mb-6">
+          <table class="w-full border border-gray-200 rounded-lg">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left font-semibold text-gray-900 border-b">Feature</th>
+                <th class="px-4 py-3 text-left font-semibold text-gray-900 border-b">Traditional Term Deposit</th>
+                <th class="px-4 py-3 text-left font-semibold text-gray-900 border-b">PIE Term Deposit</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-4 py-3 font-medium text-gray-900">Tax Rate</td>
+                <td class="px-4 py-3 text-gray-600">Your marginal tax rate</td>
+                <td class="px-4 py-3 text-gray-600">Your PIR (max 28%)</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="px-4 py-3 font-medium text-gray-900">Tax Return Impact</td>
+                <td class="px-4 py-3 text-gray-600">Interest added to taxable income</td>
+                <td class="px-4 py-3 text-gray-600">No additional tax obligations</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-gray-900">Security</td>
+                <td class="px-4 py-3 text-gray-600">Principal guaranteed</td>
+                <td class="px-4 py-3 text-gray-600">Principal guaranteed</td>
+              </tr>
+              <tr class="bg-gray-50">
+                <td class="px-4 py-3 font-medium text-gray-900">Interest Rate</td>
+                <td class="px-4 py-3 text-gray-600">Fixed rate</td>
+                <td class="px-4 py-3 text-gray-600">Fixed rate (may differ)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Important Considerations for PIE Investors</h3>
+        <p class="text-gray-600 mb-4"><strong>PIR Accuracy</strong>: Ensure your PIR is correct when investing. An incorrect PIR can result in over or under-payment of tax.</p>
+        <p class="text-gray-600 mb-4"><strong>Investment Minimums</strong>: PIE term deposits may have different minimum investment requirements compared to traditional term deposits.</p>
+        <p class="text-gray-600 mb-4"><strong>Rates May Differ</strong>: PIE term deposit rates might be different from traditional term deposit rates from the same institution.</p>
+        <p class="text-gray-600 mb-4"><strong>Early Withdrawal</strong>: PIE term deposits typically have similar early withdrawal provisions to traditional term deposits, including potential penalties.</p>
+
+        {data.rates.length > 0 && (
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {pieTermBlocks.map((b) => (
+              <div class="bg-gray-50 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-900 mb-2">{b.term} PIE Terms</h4>
+                <p class="text-sm text-gray-600">
+                  <strong>Rate range:</strong> {b.min.toFixed(2)}% - {b.max.toFixed(2)}%<br />
+                  <strong>Available from:</strong> {b.banks} banks
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Calculating Your PIE Tax Benefit</h3>
+        <p class="text-gray-600 mb-4">The tax benefit of PIE investing depends on your marginal tax rate versus your PIR:</p>
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+          <h4 class="font-semibold text-gray-900 mb-2">Example Scenario:</h4>
+          <p class="text-sm text-gray-600 mb-2">$50,000 investment at 4.50% interest for 1 year</p>
+          <ul class="text-sm text-gray-600 space-y-1">
+            <li>• <strong>Traditional term deposit (33% tax rate):</strong> $1,507.50 after tax</li>
+            <li>• <strong>PIE term deposit (28% PIR):</strong> $1,620.00 after tax</li>
+            <li>• <strong>Annual tax saving:</strong> $112.50</li>
+          </ul>
+        </div>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Getting Started with PIE Term Deposits</h3>
+        <p class="text-gray-600 mb-4">To invest in PIE term deposits, you'll need to:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Confirm your correct PIR with your tax advisor or IRD</li>
+          <li>Compare PIE rates with traditional term deposit rates</li>
+          <li>Consider the impact on your overall investment strategy</li>
+          <li>Understand the terms and conditions specific to PIE investments</li>
+        </ul>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">PIE Term Deposit Strategy Tips</h3>
+        <p class="text-gray-600 mb-4"><strong>Rate Comparison</strong>: Don't assume PIE rates are always better. Compare the after-tax returns of both PIE and traditional term deposits.</p>
+        <p class="text-gray-600 mb-4"><strong>Diversification</strong>: Consider PIE term deposits as part of a broader investment portfolio that might include KiwiSaver, shares, and property.</p>
+        <p class="text-gray-600 mb-4"><strong>Laddering Strategy</strong>: Use the same laddering principles with PIE term deposits to maintain liquidity while maximizing returns.</p>
+        <p class="text-gray-600 mb-4"><strong>Tax Planning</strong>: PIE investments can be valuable for tax planning, particularly for higher-income earners approaching retirement.</p>
+
+        <h2 class="text-3xl font-bold text-gray-900 mt-12 mb-6">Frequently Asked Questions About PIE Term Deposits</h2>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">What is my PIR and how do I find it?</h3>
+        <p class="text-gray-600 mb-4">Your PIR is based on your taxable income in the two preceding tax years. PIRs are 10.5%, 17.5%, or 28%. You can find your correct PIR using the IRD's PIR calculator or consult a tax professional.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I switch from a traditional term deposit to a PIE term deposit?</h3>
+        <p class="text-gray-600 mb-4">You cannot directly convert existing term deposits to PIE structures. You would need to wait for maturity or break your current deposit and reinvest in a PIE term deposit.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Are PIE term deposits as secure as regular term deposits?</h3>
+        <p class="text-gray-600 mb-4">PIE term deposits typically offer the same principal protection as traditional term deposits when invested with the same institution. However, verify the specific structure and guarantees with your chosen provider.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Do I need to declare PIE investments in my tax return?</h3>
+        <p class="text-gray-600 mb-4">Generally, PIE investments don't require declaration in your annual tax return as tax is calculated and paid at the PIE level. However, you should keep records of your investments and consult current IRD guidelines.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">What happens if my income changes and my PIR should be different?</h3>
+        <p class="text-gray-600 mb-4">You should notify your PIE provider if your circumstances change and your PIR needs updating. Using an incorrect PIR can result in tax implications at year-end.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can non-residents invest in PIE term deposits?</h3>
+        <p class="text-gray-600 mb-4">PIE investments are generally available to New Zealand tax residents. Non-residents may face different tax treatment and should seek specific advice about their eligibility and tax implications.</p>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+          <h4 class="font-semibold text-blue-900 mb-3">Ready to Compare PIE Rates?</h4>
+          <p class="text-sm text-blue-800 mb-3">
+            Use our comparison tool above to find the best current PIE rates for your preferred term length.
+            Last updated {updatedDayMonthYear} with rates from {stats.bankCount} institutions.
+          </p>
+          <p class="text-xs text-blue-700">
+            <strong>Important:</strong> This information is for educational purposes only and does not constitute financial or tax advice.
+            PIR calculations and tax implications can be complex. Always verify current rates and terms directly with
+            financial institutions and consider seeking professional financial and tax advice for your specific circumstances.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

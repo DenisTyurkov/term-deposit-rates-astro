@@ -1,0 +1,25 @@
+---
+import { logoFor } from "../lib/logos";
+
+interface Props {
+  name: string;
+  class?: string;
+  style?: string;
+  alt?: string;
+}
+const { name, class: className = "h-8 w-auto object-contain", style, alt } = Astro.props;
+const logo = logoFor(name);
+---
+{
+  logo && (
+    <img
+      src={logo.src}
+      alt={alt ?? `${name} bank logo`}
+      class={className}
+      style={style}
+      loading="lazy"
+      width={logo.width}
+      height={logo.height}
+    />
+  )
+}

@@ -1,0 +1,69 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import BankLogoStrip from "../components/BankLogoStrip.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYearShort } from "../lib/format";
+import { collectionPageSchema, itemListSchema, ROOT_URL } from "../lib/schema";
+
+const SHORT_TERMS = ["1 month", "3 months", "4 months", "5 months", "6 months", "9 months", "12 mths"];
+const data = matrixPageData({ rateType: "regular", termLengths: SHORT_TERMS });
+const parents = logoStripParents(data.rates);
+
+const pageUrl = `${ROOT_URL}/short-term-deposit-rates`;
+const title = `Short-Term Deposit Rates NZ | Compare ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""}`;
+const description =
+  "Compare short-term deposit rates (3-12 months) from major New Zealand banks. Find the best rates for emergency funds and short-term savings goals. Updated daily.";
+
+const jsonLd = [
+  collectionPageSchema(
+    "Short-Term Deposit Rates New Zealand",
+    "Compare short-term deposit rates (3-12 months) from major New Zealand banks",
+    pageUrl,
+    data.latestScrapeAt
+  ),
+  itemListSchema(data.rates, "Short-Term Term Deposit Rates", pageUrl),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "Short-Term Rates", url: pageUrl },
+];
+
+const entry = await getEntry("pages", "short-term-deposit-rates");
+const Content = entry ? (await render(entry)).Content : null;
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Short-Term Deposit Rates New Zealand</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare short-term deposit rates (3-12 months) from major New Zealand banks.
+          Perfect for emergency funds and short-term savings goals.
+        </p>
+      </div>
+      <BankLogoStrip parents={parents} />
+    </div>
+  </div>
+
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="Short-Term Rates (1-12 Months)"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        {Content && <Content />}
+      </div>
+    </div>
+  </div>
+</Layout>

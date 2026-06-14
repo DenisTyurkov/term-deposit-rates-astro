@@ -1,0 +1,67 @@
+---
+// Port of layouts/_footer.html.erb
+const year = new Date().getFullYear();
+
+const providerLinks: { slug: string; label: string }[] = [
+  { slug: "anz", label: "ANZ" },
+  { slug: "asb", label: "ASB" },
+  { slug: "bnz", label: "BNZ" },
+  { slug: "bank-of-baroda", label: "Bank of Baroda" },
+  { slug: "bank-of-china", label: "Bank of China" },
+  { slug: "bank-of-india", label: "Bank of India" },
+  { slug: "china-construction-bank", label: "China Construction Bank" },
+  { slug: "co-operative-bank", label: "Co-operative Bank" },
+  { slug: "heartland-bank", label: "Heartland Bank" },
+  { slug: "icbc", label: "ICBC" },
+  { slug: "kiwibank", label: "Kiwibank" },
+  { slug: "rabobank", label: "Rabobank" },
+  { slug: "sbs-bank", label: "SBS Bank" },
+  { slug: "tsb-bank", label: "TSB Bank" },
+  { slug: "westpac", label: "Westpac" },
+];
+---
+<footer class="bg-gray-50 border-t border-gray-200 mt-12">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Main Navigation Links -->
+    <div class="flex space-x-4 justify-center mb-6">
+      <a href="/short-term-deposit-rates" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Short-Term Rates</a>
+      <a href="/long-term-deposit-rates" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Long-Term Rates</a>
+      <a href="/term-deposit-calculator" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Calculator</a>
+      <a href="/pie-term-deposit-rates" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Pie-Term Rates</a>
+    </div>
+
+    <!-- Bank Provider Links -->
+    <div class="mb-6 pb-4 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-700 mb-3">Bank Providers</h3>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
+        {providerLinks.map((p) => (
+          <a href={`/${p.slug}`} class="text-gray-600 hover:text-gray-900 transition-colors">{p.label}</a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Partner Links -->
+    <div class="mb-6 pb-4 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-700 mb-3">Our Partners</h3>
+      <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+        <a href="https://www.broadband.co.nz/" class="text-gray-600 hover:text-gray-900 transition-colors">Compare Broadband NZ</a>
+        <a href="https://www.unlimitedbroadband.co.nz/" class="text-gray-600 hover:text-gray-900 transition-colors">Unlimited Broadband NZ</a>
+      </div>
+    </div>
+
+    <!-- Copyright and Legal -->
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <p class="text-sm text-gray-600 mb-4 md:mb-0">
+        © {year} NZ Term Deposits. All rights reserved.
+      </p>
+      <div class="flex space-x-4 mb-4 md:mb-0">
+        <a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Disclaimer</a>
+        <a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">Privacy Policy</a>
+      </div>
+    </div>
+    <p class="text-xs text-gray-500 text-center mt-4">
+      Interest rates are updated daily and are subject to change.
+      Always verify current rates directly with your chosen financial institution.
+    </p>
+  </div>
+</footer>

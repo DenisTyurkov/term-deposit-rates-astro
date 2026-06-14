@@ -1,0 +1,27 @@
+---
+import { SEO as AstroSEO } from "astro-seo";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+}
+const { title, description, canonical } = Astro.props;
+const site = "https://www.termdepositrates.co.nz";
+const ogImage = `${site}/android-chrome-512x512.png`;
+const keywords =
+  "term deposit, interest rates, NZ banks, ANZ, ASB, BNZ, Westpac, savings, investment";
+---
+<AstroSEO
+  title={title}
+  description={description}
+  canonical={canonical}
+  openGraph={{
+    basic: { title, type: "website", image: ogImage, url: canonical },
+    optional: { description, siteName: "NZ Term Deposits" },
+  }}
+  twitter={{ card: "summary_large_image", title, description }}
+  extend={{
+    meta: [{ name: "keywords", content: keywords }],
+  }}
+/>

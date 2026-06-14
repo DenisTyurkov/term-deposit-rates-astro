@@ -1,11 +1,311 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import BankLogoStrip from "../components/BankLogoStrip.astro";
+import SummaryCards from "../components/SummaryCards.astro";
+import RatesMatrix from "../components/RatesMatrix.astro";
+import BankLogo from "../components/BankLogo.astro";
+import { logoFor } from "../lib/logos";
+import { matrixPageData, logoStripParents } from "../lib/rates";
+import { monthYear, monthYearShort, dayMonthYear, delimited } from "../lib/format";
+import {
+  faqSchema,
+  itemListSchema,
+  bankOrganizationSchema,
+  homepageFaqItems,
+  ROOT_URL,
+} from "../lib/schema";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const data = matrixPageData({ rateType: "regular" });
+const parents = logoStripParents(data.rates);
+const stats = data.stats;
+const spread = stats.maxRate - stats.minRate;
+const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
+const updatedDayMonthYear = data.latestScrapeAt ? dayMonthYear(data.latestScrapeAt) : "";
+
+// Per-term highlight blocks (only "6 months" actually has data, matching Rails).
+const homeTermBlocks = ["6 months", "12 months", "24 months"]
+  .map((term) => {
+    const tr = data.rates.filter((r) => r.term_length === term);
+    if (!tr.length) return null;
+    const interest = tr.map((r) => r.interest_rate);
+    return {
+      term,
+      min: Math.min(...interest),
+      max: Math.max(...interest),
+      banks: new Set(tr.map((r) => r.bank_name)).size,
+    };
+  })
+  .filter((b): b is { term: string; min: number; max: number; banks: number } => b !== null);
+
+// Bank grid: max rate per bank, split into two columns.
+const bankMax = (name: string) => {
+  const rs = data.rates.filter((r) => r.bank_name === name).map((r) => r.interest_rate);
+  return rs.length ? Math.max(...rs) : 0;
+};
+const half = Math.ceil(data.banks.length / 2);
+const bankGroups = [data.banks.slice(0, half), data.banks.slice(half)];
+
+const title = `Term Deposit Rates — Compare Bank Interest Rates | ${monthYearShort(data.latestScrapeAt ?? new Date().toISOString())}`;
+const description =
+  "Live NZ term-deposit interest rates from ANZ, ASB, BNZ and more. Updated daily.";
+
+const jsonLd = [
+  faqSchema(homepageFaqItems),
+  itemListSchema(data.rates, "New Zealand Term Deposit Rates", `${ROOT_URL}/`),
+  ...parents.map((p) => bankOrganizationSchema(p.name, p.slug)),
+];
 ---
+<Layout title={title} description={description} jsonLd={jsonLd}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">New Zealand Term Deposit Rates</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare the latest term deposit interest rates from major NZ banks. <br />
+          Updated daily to help you find the best rates for your savings.
+        </p>
+      </div>
+      <BankLogoStrip parents={parents} />
+    </div>
+  </div>
 
-<Layout>
-	<Welcome />
+  <SummaryCards cards={data.summaryCards} latestScrapeAt={data.latestScrapeAt} />
+
+  <RatesMatrix
+    heading="Current Rates"
+    banks={data.banks}
+    terms={data.terms}
+    matrix={data.matrix}
+    bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <!-- Content Section -->
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div class="prose prose-gray max-w-none">
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">Understanding Term Deposits: Your Complete Guide to Fixed-Rate Savings in New Zealand</h2>
+
+        <p class="text-lg text-gray-600 mb-6">
+          Term deposits remain one of New Zealand's most popular investment options for conservative savers seeking guaranteed returns.
+          As of {updatedMonthYear}, we track rates from {stats.bankCount} major financial institutions
+          across {stats.termCount} different term lengths. Whether you're considering
+          <a href="/short-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">short-term deposits for flexible savings</a> or
+          <a href="/long-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">longer-term fixed investments</a>,
+          understanding how term deposits work and when to invest can help you make informed decisions about your savings strategy.
+        </p>
+
+        {data.rates.length > 0 ? (
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-blue-900 mb-2">Quick Market Insights ({updatedDayMonthYear}):</h3>
+            <ul class="text-sm text-blue-800 space-y-1">
+              <li>• Current rates range from <strong>{stats.minRate.toFixed(2)}%</strong> to <strong>{stats.maxRate.toFixed(2)}%</strong></li>
+              <li>• Average minimum deposit: ${stats.avgMinDeposit != null ? delimited(stats.avgMinDeposit) : ""}</li>
+              <li>• {stats.bankCount} institutions tracked across {stats.termCount} term lengths</li>
+            </ul>
+          </div>
+        ) : (
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <h3 class="font-semibold text-yellow-900 mb-2">Market Data Update</h3>
+            <p class="text-sm text-yellow-800">Rate data is currently being updated. Please check back soon for the latest term deposit rates.</p>
+          </div>
+        )}
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">What Are Term Deposits and How Do They Work?</h3>
+        <p class="text-gray-600 mb-4">
+          A term deposit is a fixed-term investment where you deposit money with a bank or financial institution for a predetermined period. Terms can vary from short periods of a few months to several years. In exchange for locking away your funds, you receive a guaranteed interest rate that remains fixed for the entire investment term.
+        </p>
+        <p class="text-gray-600 mb-4">
+          Unlike regular savings accounts where interest rates can change, term deposits provide certainty. When you invest your money at an agreed rate, you know what return you'll receive at maturity.
+        </p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Key Benefits of Term Deposits for New Zealand Investors</h3>
+        <p class="text-gray-600 mb-4">Term deposits offer several advantages that make them attractive to risk-averse investors:</p>
+        <p class="text-gray-600 mb-4"><strong>Guaranteed Returns</strong>: Your interest rate is locked in from day one, protecting you from market volatility and rate decreases during your investment term.</p>
+        <p class="text-gray-600 mb-4"><strong>Capital Protection</strong>: Term deposits with New Zealand banks are considered low-risk investments. Your principal amount is secure, and you'll receive it back in full at maturity along with earned interest.</p>
+        <p class="text-gray-600 mb-4"><strong>No Management Fees</strong>: Unlike managed funds or KiwiSaver accounts, term deposits typically charge no ongoing fees or establishment costs.</p>
+        <p class="text-gray-600 mb-4"><strong>Flexible Terms</strong>: Banks offer various term lengths to match different investment timelines and goals.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Term Deposits vs Savings Accounts: Making the Right Choice</h3>
+        <p class="text-gray-600 mb-4">While both options offer secure returns, they serve different purposes in your investment strategy:</p>
+        <p class="text-gray-600 mb-4">Term deposits generally provide higher interest rates in exchange for locking away your money. They're suitable when you have funds you won't need for a specific period and want to maximise returns without risk.</p>
+        <p class="text-gray-600 mb-4">Savings accounts typically offer lower rates but more flexibility. They're often used for funds you may need to access regularly or at short notice. Many investors use both as part of their overall savings strategy.</p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {homeTermBlocks.map((b) => (
+            <div class="bg-gray-50 rounded-lg p-4">
+              <h4 class="font-semibold text-gray-900 mb-2">{b.term} Terms</h4>
+              <p class="text-sm text-gray-600">
+                <strong>Rate range:</strong> {b.min.toFixed(2)}% - {b.max.toFixed(2)}%<br />
+                <strong>Available from:</strong> {b.banks} banks
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">How Interest Payments Work on Term Deposits</h3>
+        <p class="text-gray-600 mb-4">Understanding interest payment options helps you choose the right structure for your needs:</p>
+        <p class="text-gray-600 mb-4"><strong>At Maturity</strong>: Many term deposits pay all interest when the term ends. This is straightforward but means you don't receive any income during the term.</p>
+        <p class="text-gray-600 mb-4"><strong>Regular Payments</strong>: Some banks offer monthly, quarterly, or annual interest payments. This provides income during the term but may affect your overall return.</p>
+        <p class="text-gray-600 mb-4"><strong>Compounding Options</strong>: Certain term deposits allow interest to be reinvested, potentially increasing your returns over the investment period.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Tax Implications for Term Deposit Investors</h3>
+        <p class="text-gray-600 mb-4">All term deposit interest is taxable income in New Zealand. When opening a term deposit, you must provide:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Your IRD number</li>
+          <li>Your prescribed investor rate (PIR) or tax rate</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Banks deduct Resident Withholding Tax (RWT) from interest payments based on the rate you provide. It's important to ensure you're on the correct tax rate to avoid under or overpayment of tax. Consult current IRD guidelines or a tax professional for your specific situation.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Breaking a Term Deposit: What You Need to Know</h3>
+        <p class="text-gray-600 mb-4">While term deposits are designed to be held until maturity, circumstances may require early access to funds. Breaking a term deposit typically results in:</p>
+        <p class="text-gray-600 mb-4"><strong>Reduced Interest</strong>: Most banks apply an interest rate reduction if you withdraw early. The penalty varies between institutions and may depend on how early you withdraw.</p>
+        <p class="text-gray-600 mb-4"><strong>Notice Requirements</strong>: Banks often require advance notice for early withdrawals. The notice period varies by institution.</p>
+        <p class="text-gray-600 mb-4"><strong>Principal Protection</strong>: Your original deposit amount is protected - you won't lose your principal, though you may forfeit some or all interest earned.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Smart Strategies for Term Deposit Investing</h3>
+        <p class="text-gray-600 mb-4">
+          <strong>Laddering</strong>: Consider splitting your funds across multiple term deposits with different maturity dates. This can provide regular access to funds while maintaining competitive returns.
+          Our <a href="/term-deposit-calculator" class="text-blue-600 hover:text-blue-800 underline">term deposit calculator</a> helps model different laddering scenarios.
+        </p>
+        <p class="text-gray-600 mb-4">
+          <strong>Rate Comparison</strong>: Interest rates can vary between banks. Our comparison tool shows differences of up to {spread.toFixed(2)} percentage points for similar terms. Take time to compare options from different institutions.
+        </p>
+        <p class="text-gray-600 mb-4">
+          <strong>Term Selection</strong>: Consider your future cash needs when selecting terms. Longer terms may offer different rates than shorter ones.
+          Review our <a href="/long-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">comprehensive term length guide</a> for detailed strategies.
+        </p>
+        <p class="text-gray-600 mb-4"><strong>Communication</strong>: Some banks may offer better rates to existing customers or for larger deposits. It's worth inquiring about available rates before committing.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Minimum Deposits and Maximum Investment Limits</h3>
+        <p class="text-gray-600 mb-4">
+          Banks set different minimum deposit requirements for term deposits. Based on our current data, minimum deposits range from ${stats.minMinDeposit != null ? delimited(stats.minMinDeposit) : ""} to ${stats.maxMinDeposit != null ? delimited(stats.maxMinDeposit) : ""}, depending on the institution and product.
+        </p>
+        <p class="text-gray-600 mb-4">Some banks offer tiered rates where different deposit amounts may qualify for different interest rates. Check with individual banks for their specific requirements and any maximum limits that may apply.</p>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          {bankGroups.map((group) => (
+            <ul class="space-y-2">
+              {group.map((bank) => (
+                <li class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                  <div class="flex items-center space-x-3">
+                    {logoFor(bank.bank_name) && (
+                      <BankLogo name={bank.bank_name} class="h-6 w-auto object-contain flex-shrink-0" />
+                    )}
+                    <span class="font-medium text-gray-900">{bank.bank_name}</span>
+                  </div>
+                  <span class="text-sm text-gray-600">Up to {bankMax(bank.bank_name).toFixed(2)}%</span>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Online vs Branch Applications: Modern Banking Options</h3>
+        <p class="text-gray-600 mb-4">Many banks now offer online term deposit applications alongside traditional branch services. Digital options may include:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Online application processes</li>
+          <li>Electronic identity verification</li>
+          <li>Digital account management</li>
+          <li>Mobile banking integration</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Both online and branch channels typically offer access to the same products, though the application process may differ.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Term Deposit Alternatives Worth Considering</h3>
+        <p class="text-gray-600 mb-4">While term deposits suit many investors, other options include:</p>
+        <p class="text-gray-600 mb-4"><strong>Notice Saver Accounts</strong>: These require advance notice for withdrawals but may offer more flexibility than term deposits.</p>
+        <p class="text-gray-600 mb-4"><strong>Corporate Bonds</strong>: These may offer different returns but come with different risk profiles.</p>
+        <p class="text-gray-600 mb-4"><strong>PIE Term Deposits</strong>: Portfolio Investment Entity term deposits may offer tax advantages for some investors.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Common Term Deposit Mistakes to Avoid</h3>
+        <p class="text-gray-600 mb-4"><strong>Automatic Renewal</strong>: Review rates and options before your term deposit matures rather than allowing automatic renewal.</p>
+        <p class="text-gray-600 mb-4"><strong>Tax Considerations</strong>: Ensure you're on the correct tax rate and understand the tax implications of your investment.</p>
+        <p class="text-gray-600 mb-4"><strong>Liquidity Planning</strong>: Maintain adequate accessible savings for emergencies to avoid needing to break term deposits.</p>
+        <p class="text-gray-600 mb-4"><strong>Institution Research</strong>: Consider the stability and reputation of financial institutions alongside interest rates.</p>
+
+        <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Making Informed Term Deposit Decisions</h3>
+        <p class="text-gray-600 mb-4">Term deposits continue to play an important role in many New Zealand investment portfolios. They offer security and predictable returns for conservative investors and those saving for specific goals.</p>
+        <p class="text-gray-600 mb-4">Before investing, consider:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Your cash flow needs during the investment term</li>
+          <li>Current interest rate environment</li>
+          <li>Your overall investment strategy</li>
+          <li>The reputation and stability of your chosen institution</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Regular review of your term deposit strategy, especially as deposits approach maturity, helps ensure your money continues to work effectively within your risk tolerance and financial goals.</p>
+
+        <h2 class="text-3xl font-bold text-gray-900 mt-12 mb-6">Frequently Asked Questions About Term Deposits</h2>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">How much money do I need to open a term deposit?</h3>
+        <p class="text-gray-600 mb-4">Minimum deposit requirements vary significantly between banks. Some institutions accept smaller amounts while others require larger minimum deposits. Contact individual banks to confirm their current requirements.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I add money to an existing term deposit?</h3>
+        <p class="text-gray-600 mb-4">Generally, you cannot add funds to an existing term deposit once it's been established. If you want to invest additional money, you'll need to open a separate term deposit.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">What happens when my term deposit matures?</h3>
+        <p class="text-gray-600 mb-4">When your term deposit reaches maturity, you'll need to provide instructions to your bank. Common options include:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Withdrawing the funds to your nominated account</li>
+          <li>Rolling over into a new term deposit at current rates</li>
+          <li>Rolling over the principal only and withdrawing the interest</li>
+          <li>Splitting the funds between multiple options</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Banks have different policies regarding grace periods and automatic renewals. Some may automatically reinvest your funds if you don't provide instructions, while others may transfer the money to a standard account. Check your bank's specific terms when opening your term deposit to understand their maturity process.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Are term deposits covered by government guarantee?</h3>
+        <p class="text-gray-600 mb-4">New Zealand doesn't currently have a government deposit guarantee scheme. However, the Reserve Bank of New Zealand regulates banks and monitors their financial stability. Check the credit ratings and financial strength of any institution before investing.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I have a joint term deposit?</h3>
+        <p class="text-gray-600 mb-4">Many banks offer joint term deposits, though availability varies. Joint accounts typically require both account holders to agree to any changes or early withdrawals. Confirm options with your chosen bank.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">How is term deposit interest taxed?</h3>
+        <p class="text-gray-600 mb-4">Term deposit interest is taxable income in New Zealand. Banks deduct Resident Withholding Tax (RWT) at your nominated rate. It's important to provide the correct tax rate to avoid tax complications. Consult current IRD guidelines or a tax professional for advice specific to your situation.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">What's the longest term deposit available?</h3>
+        <p class="text-gray-600 mb-4">Maximum term lengths vary between banks. Some offer extended terms while others focus on shorter periods. Consider your long-term needs and the interest rate environment when selecting terms.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I use my term deposit as security for a loan?</h3>
+        <p class="text-gray-600 mb-4">Some banks accept term deposits as security for loans or overdrafts. This arrangement varies by institution and may depend on the specific loan product. Discuss options with your bank if this interests you.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Do I need to be a New Zealand resident to open a term deposit?</h3>
+        <p class="text-gray-600 mb-4">Residency requirements vary by bank. Some institutions require New Zealand residency or specific visa types, while others may accept non-resident applications with additional documentation. International tax implications may also apply.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">How quickly can I access my money in an emergency?</h3>
+        <p class="text-gray-600 mb-4">Early withdrawal processes and timeframes vary between banks. While term deposits are designed to be held until maturity, most banks have procedures for genuine financial hardship. You'll typically face interest penalties for early withdrawal. Contact your bank to understand their specific policies.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Are online term deposit rates better than branch rates?</h3>
+        <p class="text-gray-600 mb-4">Banks may offer the same rates through different channels, though this can vary. Online-only banks may have different rate structures than traditional banks. Compare options from various sources to find suitable rates.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Should I choose monthly interest payments or interest at maturity?</h3>
+        <p class="text-gray-600 mb-4">The choice between payment frequencies depends on your individual needs:</p>
+        <ul class="list-disc pl-6 text-gray-600 mb-4">
+          <li>Regular payments provide income during the term</li>
+          <li>Payment at maturity means all interest is paid at once</li>
+        </ul>
+        <p class="text-gray-600 mb-4">Consider your cash flow requirements and any potential tax implications when deciding.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">What's the difference between a term deposit and a PIE term deposit?</h3>
+        <p class="text-gray-600 mb-4">PIE (Portfolio Investment Entity) term deposits have different tax treatment than standard term deposits. They may benefit investors in certain tax brackets. Consult a financial advisor or tax professional to understand which option might suit your circumstances.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I transfer my term deposit to another bank?</h3>
+        <p class="text-gray-600 mb-4">You cannot directly transfer a term deposit between banks. To move funds to another institution, you must either wait until maturity or break the deposit (potentially incurring penalties) and reinvest elsewhere.</p>
+
+        <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">How do term deposit rates compare to inflation?</h3>
+        <p class="text-gray-600 mb-4">Term deposit returns should be considered in the context of inflation and your overall investment objectives. While term deposits offer security and guaranteed returns, consider how these returns compare to the cost of living increases over time. This comparison can help inform your investment decisions as part of a balanced portfolio approach.</p>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+          <h4 class="font-semibold text-blue-900 mb-3">Ready to Compare Rates?</h4>
+          <p class="text-sm text-blue-800 mb-3">
+            Use our comparison tool above to find the best current rates for your preferred term length.
+            Last updated {updatedDayMonthYear} with rates from {stats.bankCount} institutions.
+          </p>
+          <p class="text-xs text-blue-700">
+            <strong>Disclaimer:</strong> This information is for educational purposes only and does not constitute financial advice.
+            Interest rates shown are indicative and subject to change. Always verify current rates and terms directly with
+            financial institutions before making investment decisions. Consider seeking professional financial advice for your specific circumstances.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>

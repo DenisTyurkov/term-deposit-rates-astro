@@ -1,0 +1,157 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { calculatorData } from "../lib/rates";
+import { longDateTime } from "../lib/format";
+import { webApplicationSchema, ROOT_URL } from "../lib/schema";
+
+const data = calculatorData();
+const pageUrl = `${ROOT_URL}/term-deposit-calculator`;
+
+const title = "Term Deposit Calculator - NZ Rates & Returns | TermDepositRates.co.nz";
+const description =
+  "Calculate term deposit returns with live NZ bank rates. Compare investment amounts, terms and interest earnings from all major banks updated daily.";
+
+const jsonLd = [
+  webApplicationSchema(
+    "Term Deposit Calculator",
+    "Calculate your term deposit returns using live rates from New Zealand's major banks. Updated daily with current market rates.",
+    pageUrl
+  ),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "Term Deposit Calculator", url: pageUrl },
+];
+
+const entry = await getEntry("pages", "term-deposit-calculator");
+const Content = entry ? (await render(entry)).Content : null;
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Term Deposit Calculator</h1>
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+        Calculate your term deposit returns using live rates from New Zealand's major banks.
+        Updated daily with current market rates.
+      </p>
+      {data.latestScrapeAt && (
+        <p class="text-sm text-gray-500 mt-2">Rates last updated: {longDateTime(data.latestScrapeAt)}</p>
+      )}
+    </div>
+
+    <!-- Calculator Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8" data-calculator>
+      <script type="application/json" id="calc-data" is:inline set:html={JSON.stringify(data.ratesData)} />
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Input Controls -->
+        <div class="space-y-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Calculate Your Returns</h2>
+
+          <div>
+            <label for="deposit-amount" class="block text-sm font-medium text-gray-700 mb-2">Deposit Amount (NZD)</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <input type="number" id="deposit-amount"
+                class="block w-full pl-7 pr-12 py-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg"
+                placeholder="10,000" value="10000" min="1000" step="1000" />
+            </div>
+            <p class="text-xs text-gray-500 mt-1">Minimum deposit typically $1,000</p>
+          </div>
+
+          <div>
+            <label for="term-length" class="block text-sm font-medium text-gray-700 mb-2">Term Length</label>
+            <select id="term-length"
+              class="block w-full py-3 px-3 border border-gray-300 bg-white rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg">
+              {data.terms.map((term) => (
+                <option value={term} selected={term === "12 mths"}>{term}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label for="bank-select" class="block text-sm font-medium text-gray-700 mb-2">Compare Banks</label>
+            <select id="bank-select"
+              class="block w-full py-3 px-3 border border-gray-300 bg-white rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg">
+              <option value="">Show all banks</option>
+              {data.banks.map((bank) => <option value={bank}>{bank}</option>)}
+            </select>
+            <p class="text-xs text-gray-500 mt-1">Select a specific bank or compare all</p>
+          </div>
+
+          <div>
+            <label for="payment-frequency" class="block text-sm font-medium text-gray-700 mb-2">Interest Payment</label>
+            <select id="payment-frequency"
+              class="block w-full py-3 px-3 border border-gray-300 bg-white rounded-md focus:ring-blue-500 focus:border-blue-500 text-lg">
+              <option value="maturity">At maturity</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="annually">Annually</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Investment Results</h3>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-white rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-green-600" data-calc="totalReturn">$0</div>
+              <div class="text-sm text-gray-600">Total Return</div>
+            </div>
+            <div class="bg-white rounded-lg p-4 text-center">
+              <div class="text-2xl font-bold text-blue-600" data-calc="interestEarned">$0</div>
+              <div class="text-sm text-gray-600">Interest Earned</div>
+            </div>
+          </div>
+
+          <div class="space-y-3" data-calc="rateBreakdown">
+            <div class="text-center text-gray-500 py-8">
+              <p>Loading rates...</p>
+            </div>
+          </div>
+
+          <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h4 class="font-medium text-blue-900 mb-2">Tax Considerations</h4>
+            <p class="text-sm text-blue-800">
+              Interest earnings are subject to Resident Withholding Tax (RWT).
+              Rates vary by income level (10.5%, 17.5%, 30%, 33%).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Balance Growth Chart -->
+      <div class="bg-white rounded-lg p-6 mt-8">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4" data-calc="chartTitle">Balance Growth Over Time</h3>
+        <div class="h-80">
+          <canvas data-calc="chart" class="w-full h-full"></canvas>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-4 text-sm text-gray-600">
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+            <span>Simple Interest (At Maturity)</span>
+          </div>
+          <div class="flex items-center">
+            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+            <span>Compound Interest (Regular Payments)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="max-w-4xl mx-auto prose prose-lg">
+      {Content && <Content />}
+    </div>
+  </div>
+
+  <script>
+    import "../scripts/calculator.ts";
+  </script>
+</Layout>

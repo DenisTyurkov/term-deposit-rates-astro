@@ -1,0 +1,225 @@
+---
+// Port of the matrix table shared by rates/index, short_term, long_term, pie_index.
+// Renders the whole "Current Rates" card incl. the bank filter, sortable term
+// columns, best-rate highlighting and the "Last updated" line. The sort/filter
+// behaviour is the island script at the bottom (vanilla port of
+// rates_table_controller.js).
+import BankLogo from "./BankLogo.astro";
+import { logoFor } from "../lib/logos";
+import { pct, delimited, longDateTime } from "../lib/format";
+import { displayName, type BankInfo, type RatesMatrix, type BestRates } from "../lib/rates";
+
+interface Props {
+  heading: string;
+  banks: BankInfo[];
+  terms: string[];
+  matrix: RatesMatrix;
+  bestRates: BestRates | null;
+  latestScrapeAt: string | null;
+}
+const { heading, banks, terms, matrix, bestRates, latestScrapeAt } = Astro.props;
+
+const BASE_CELL = "rate-cell px-2 py-2 text-center border-l border-gray-100";
+function cellClass(isBestOverall: boolean, isTop3: boolean, isTermWinner: boolean): string {
+  if (isBestOverall)
+    return `${BASE_CELL} bg-gradient-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-500`;
+  if (isTop3)
+    return `${BASE_CELL} bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-500`;
+  if (isTermWinner) return `${BASE_CELL} bg-green-50 border-l-2 border-green-400`;
+  return BASE_CELL;
+}
+
+const tableMinWidth = 200 + terms.length * 75;
+const ids = bestRates?.rate_ids;
+---
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200" data-rates-table>
+    <div class="p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">{heading}</h2>
+
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div>
+            <label for="bankFilter" class="block text-sm font-medium text-gray-700 mb-1">Bank</label>
+            <select id="bankFilter" class="border border-gray-300 rounded-md px-3 py-2 text-sm" data-rates-filter>
+              <option value="">All Banks</option>
+              {banks.map((bank) => <option value={bank.bank_name}>{bank.bank_name}</option>)}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matrix Table -->
+      <div class="overflow-x-auto rounded-lg">
+        <table class="w-full divide-y divide-gray-200 matrix-table text-xs" style={`min-width: ${tableMinWidth}px;`}>
+          <thead class="bg-gray-50 sticky top-0">
+            <tr>
+              <th scope="col" class="bank-column px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10 border-r border-gray-300 min-w-[200px]">
+                Bank Details
+              </th>
+              {
+                terms.map((term) => (
+                  <th
+                    scope="col"
+                    class="term-column px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase cursor-pointer hover:bg-gray-100 border-l border-gray-200"
+                    data-sort-term={term}
+                    style="min-width: 70px; max-width: 80px;"
+                  >
+                    <div class="flex flex-col items-center">
+                      <span class="leading-tight" set:html={term.replaceAll(" ", "<br>")} />
+                      <span class="text-gray-400 sort-indicator text-xs">↕</span>
+                    </div>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200" data-rates-tbody>
+            {
+              banks.map((bank) => (
+                <tr class="hover:bg-slate-50" data-bank={bank.bank_name}>
+                  <td class="bank-info px-3 py-2 sticky left-0 bg-white z-10 border-r border-gray-200 min-w-[200px]">
+                    <div class="flex items-start space-x-3">
+                      <div class="">
+                        {logoFor(bank.bank_name) && (
+                          <div class="mb-1">
+                            <BankLogo name={bank.bank_name} class="h-6 w-auto object-contain" />
+                          </div>
+                        )}
+                        <div class="font-medium text-xs text-gray-900 leading-tight mb-1">
+                          <a href={`/${bank.parent_bank_slug}`} class="hover:text-blue-600 transition-colors">
+                            {bank.bank_name}
+                          </a>
+                        </div>
+                        <div class="text-xs text-gray-500 space-y-0.5">
+                          {bank.credit_rating && (
+                            <div class="leading-tight">
+                              <span class="text-gray-600 font-medium">Rating:</span>
+                              <span class="text-gray-800">{bank.credit_rating}</span>
+                            </div>
+                          )}
+                          {bank.minimum_deposit != null && (
+                            <div class="leading-tight">
+                              <span class="text-gray-600 font-medium">Min Deposit:</span>
+                              <span class="text-gray-800">${delimited(Math.trunc(bank.minimum_deposit / 100))}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  {
+                    terms.map((term) => {
+                      const rate = matrix[term]?.[bank.bank_name] ?? null;
+                      const isBestOverall = !!rate && ids?.best_overall === rate.id;
+                      const isTop3 = !!rate && !!ids?.top_3.includes(rate.id);
+                      const isTermWinner = !!rate && !!ids?.term_winners.includes(rate.id);
+                      return (
+                        <td
+                          class={cellClass(isBestOverall, isTop3, isTermWinner)}
+                          data-rate={rate?.interest_rate ?? 0}
+                          style="min-width: 70px; max-width: 80px;"
+                        >
+                          {rate ? (
+                            <>
+                              <div class="flex items-center justify-center space-x-1">
+                                {isBestOverall && <span class="text-yellow-600 text-xs">🏆</span>}
+                                {!isBestOverall && isTop3 && <span class="text-green-600 text-xs">⭐</span>}
+                                <span class="font-semibold text-gray-900 text-xs">{pct(rate.interest_rate)}</span>
+                              </div>
+                              {isBestOverall && <div class="text-xs text-yellow-700 font-medium mt-0.5">Best Rate</div>}
+                              {!isBestOverall && isTop3 && <div class="text-xs text-green-700 font-medium mt-0.5">Top Rate</div>}
+                            </>
+                          ) : (
+                            <span class="text-gray-400 text-xs">-</span>
+                          )}
+                        </td>
+                      );
+                    })
+                  }
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      {latestScrapeAt && (
+        <p class="mt-4 text-sm text-gray-500 text-center">Last updated: {longDateTime(latestScrapeAt)}</p>
+      )}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Island: sortable term columns + bank filter (port of rates_table_controller.js)
+  function initRatesTables() {
+    document.querySelectorAll<HTMLElement>("[data-rates-table]").forEach((root) => {
+      const tbody = root.querySelector<HTMLElement>("[data-rates-tbody]");
+      if (!tbody || (root as any)._ratesInit) return;
+      (root as any)._ratesInit = true;
+
+      let sortColumn: string | null = null;
+      let sortDirection: "asc" | "desc" = "asc";
+
+      const updateIndicators = (term: string) => {
+        root.querySelectorAll<HTMLElement>("th .sort-indicator").forEach((s) => {
+          s.textContent = "↕";
+          s.classList.remove("text-blue-600");
+          s.classList.add("text-gray-400");
+        });
+        const active = root.querySelector<HTMLElement>(
+          `th[data-sort-term="${CSS.escape(term)}"] .sort-indicator`
+        );
+        if (active) {
+          active.textContent = sortDirection === "asc" ? "↑" : "↓";
+          active.classList.remove("text-gray-400");
+          active.classList.add("text-blue-600");
+        }
+      };
+
+      const sortByTerm = (term: string) => {
+        const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr"));
+        if (sortColumn === term) sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        else {
+          sortDirection = "asc";
+          sortColumn = term;
+        }
+        updateIndicators(term);
+        const termHeaders = Array.from(root.querySelectorAll<HTMLElement>("th.term-column"));
+        const termIndex = termHeaders.findIndex((h) => h.dataset.sortTerm === term) + 1;
+        rows.sort((a, b) => {
+          const ac = a.cells[termIndex];
+          const bc = b.cells[termIndex];
+          if (!ac || !bc) return 0;
+          const ar = parseFloat(ac.dataset.rate || "") || 0;
+          const br = parseFloat(bc.dataset.rate || "") || 0;
+          if (ar === 0 && br !== 0) return 1;
+          if (ar !== 0 && br === 0) return -1;
+          if (ar === 0 && br === 0) return 0;
+          if (ar < br) return sortDirection === "asc" ? -1 : 1;
+          if (ar > br) return sortDirection === "asc" ? 1 : -1;
+          return 0;
+        });
+        rows.forEach((r) => tbody.appendChild(r));
+      };
+
+      root.querySelectorAll<HTMLElement>("[data-sort-term]").forEach((th) => {
+        th.addEventListener("click", () => sortByTerm(th.dataset.sortTerm as string));
+      });
+
+      const filter = root.querySelector<HTMLSelectElement>("[data-rates-filter]");
+      filter?.addEventListener("input", () => {
+        const val = filter.value;
+        tbody.querySelectorAll<HTMLTableRowElement>("tr").forEach((row) => {
+          const bank = row.dataset.bank;
+          row.style.display = !val || bank === val ? "" : "none";
+        });
+      });
+    });
+  }
+
+  initRatesTables();
+  document.addEventListener("astro:page-load", initRatesTables);
+</script>

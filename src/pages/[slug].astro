@@ -1,0 +1,175 @@
+---
+import { getEntry, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import BankLogo from "../components/BankLogo.astro";
+import { logoFor } from "../lib/logos";
+import { allProviders, providerPageData } from "../lib/rates";
+import { pct, delimited, longDateTime, monthYearShort } from "../lib/format";
+import { bankOrganizationSchema, collectionPageSchema, itemListSchema, ROOT_URL } from "../lib/schema";
+
+export async function getStaticPaths() {
+  return allProviders().map((provider) => ({
+    params: { slug: provider.slug },
+    props: { provider },
+  }));
+}
+
+const { provider } = Astro.props;
+const data = providerPageData(provider);
+const allRates = data.products.flatMap((p) => p.rates);
+
+const pageUrl = `${ROOT_URL}/${provider.slug}`;
+const updated = data.latestScrapeAt;
+const title = `${provider.name} Term Deposit Rates — Compare Interest Rates | ${monthYearShort(updated ?? new Date().toISOString())}`;
+const description = `Compare ${provider.name} Term Deposit Rates — Latest Interest Rates - Updated Daily.`;
+
+const jsonLd = [
+  bankOrganizationSchema(provider.name, provider.slug),
+  collectionPageSchema(
+    `${provider.name} Term Deposit Rates`,
+    `Compare ${provider.name} term deposit rates and find the best investment options`,
+    pageUrl,
+    updated
+  ),
+  itemListSchema(allRates, `${provider.name} Term Deposit Rates`, pageUrl),
+];
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: `${provider.name} Rates`, url: pageUrl },
+];
+
+const tableMinWidth = 200 + data.terms.length * 75;
+
+const entry = await getEntry("providers", provider.slug);
+const Content = entry ? (await render(entry)).Content : null;
+---
+<Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
+  <div class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-12">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{provider.name} Term Deposit Rates</h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Compare the latest {provider.name} term deposit interest rates.
+          Updated daily to help you find the best rates from this provider.
+        </p>
+      </div>
+
+      <!-- Bank Logo Strip -->
+      <div class="flex gap-4 overflow-x-auto py-4 justify-center">
+        {
+          data.navBanks.map((bank) => (
+            <div class={`flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center p-2 ${bank.name === provider.name ? "ring-2 ring-blue-500 bg-blue-50" : ""}`}>
+              <a href={`/${bank.slug}`} class="block w-full h-full flex items-center justify-center">
+                {logoFor(bank.name) ? (
+                  <BankLogo name={bank.name} class="h-12 w-auto object-contain" />
+                ) : (
+                  <span class="text-xs font-medium text-gray-600 uppercase text-center">{bank.name}</span>
+                )}
+              </a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Rates Section -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    {
+      data.products.map((product, index) => (
+        <div class={`bg-white rounded-lg shadow-sm border border-gray-200 ${index > 0 ? "mt-8" : ""}`}>
+          <div class="p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 mb-4 sm:mb-0">{product.name} Rates</h2>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg">
+              <table class="w-full divide-y divide-gray-200 matrix-table text-xs" style={`min-width: ${tableMinWidth}px;`}>
+                <thead class="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th scope="col" class="bank-column px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky left-0 bg-gray-50 z-10 border-r border-gray-300 min-w-[200px]">
+                      Product Details
+                    </th>
+                    {data.terms.map((term) => (
+                      <th scope="col" class="term-column px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase border-l border-gray-200" style="min-width: 70px; max-width: 80px;">
+                        <div class="flex flex-col items-center">
+                          <span class="leading-tight" set:html={term.replaceAll(" ", "<br>")} />
+                          <span class="text-gray-400 sort-indicator text-xs">↕</span>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-slate-50" data-bank={product.name}>
+                    <td class="bank-info px-3 py-2 sticky left-0 bg-white z-10 border-r border-gray-200 min-w-[200px]">
+                      <div class="flex items-start space-x-3">
+                        <div class="text-center">
+                          {logoFor(product.name) && (
+                            <div class="mb-1">
+                              <BankLogo name={product.name} class="h-6 w-auto object-contain mx-auto" />
+                            </div>
+                          )}
+                          <div class="font-medium text-xs text-gray-900 leading-tight mb-1">{product.name}</div>
+                          <div class="text-xs text-gray-500 space-y-0.5">
+                            {product.credit_rating && (
+                              <div class="leading-tight">
+                                <span class="text-gray-600 font-medium">Rating:</span>
+                                <span class="text-gray-800">{product.credit_rating}</span>
+                              </div>
+                            )}
+                            {product.minimum_deposit != null && (
+                              <div class="leading-tight">
+                                <span class="text-gray-600 font-medium">Min Deposit:</span>
+                                <span class="text-gray-800">${delimited(Math.trunc(product.minimum_deposit / 100))}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    {data.terms.map((term) => {
+                      const rate = product.matrix[term];
+                      return (
+                        <td class="rate-cell px-2 py-2 text-center border-l border-gray-100" data-rate={rate?.interest_rate ?? 0} style="min-width: 70px; max-width: 80px;">
+                          {rate ? (
+                            <span class="font-semibold text-gray-900 text-xs">{pct(rate.interest_rate)}</span>
+                          ) : (
+                            <span class="text-gray-400 text-xs">-</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {updated && index === data.products.length - 1 && (
+              <p class="mt-4 text-sm text-gray-500 text-center">Last updated: {longDateTime(updated)}</p>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- SEO Content Section -->
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      {Content ? (
+        <section class="prose prose-gray max-w-none">
+          <Content />
+        </section>
+      ) : (
+        <div class="prose prose-gray max-w-none">
+          <h2 class="text-3xl font-bold text-gray-900 mb-6">About {provider.name} Term Deposits in New Zealand</h2>
+          <p class="text-lg text-gray-600 mb-6">
+            {provider.name} offers competitive term deposit rates to New Zealand savers.
+            Find detailed information about their current rates, terms, and conditions above.
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>

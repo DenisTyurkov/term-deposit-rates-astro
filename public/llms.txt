@@ -1,0 +1,131 @@
+# Term Deposit Rates New Zealand - LLM Interface Documentation
+
+## Site Purpose
+TermDepositRates.co.nz is New Zealand's comprehensive comparison platform for term deposit interest rates. We track daily rates from major NZ banks and financial institutions, providing real-time comparisons, calculators, and detailed guides to help New Zealanders make informed savings decisions.
+
+## Last Updated
+September 1, 2025
+
+## Site Structure
+
+### Primary Pages (Priority 1)
+- `/` - Homepage with complete rates matrix and comprehensive term deposit guide (updated daily)
+- `/term-deposit-calculator` - Interactive calculator with growth charts and bank comparisons
+- `/short-term-deposit-rates` - Rates for terms 1-12 months with specialized content
+- `/long-term-deposit-rates` - Rates for terms 18 months - 5 years with investment strategies
+- `/pie-term-deposit-rates` - PIE (Portfolio Investment Entity) term deposit rates and tax information
+
+### Bank-Specific Pages (Priority 2)
+Dynamic provider pages available for each tracked bank:
+- `/anz` - ANZ Bank term deposit rates and bank information
+- `/asb` - ASB Bank rates and detailed analysis  
+- `/bnz` - BNZ rates and product information
+- `/westpac` - Westpac term deposit offerings
+- `/kiwibank` - Kiwibank rates and community banking focus
+- `/heartland-bank` - Heartland Bank specialized products
+- `/tsb-bank` - TSB Bank regional banking services
+- `/sbs-bank` - SBS Bank rates and services
+- `/co-operative-bank` - Co-operative Bank member-focused products
+- `/rabobank` - Rabobank agricultural and business focus
+- `/bank-of-baroda` - Bank of Baroda international services
+- `/bank-of-china` - Bank of China cross-border banking
+- `/bank-of-india` - Bank of India services
+- `/china-construction-bank` - China Construction Bank rates
+- `/icbc` - Industrial and Commercial Bank of China
+
+### SEO and Utility Pages (Priority 3)
+- `/sitemap.xml` - XML sitemap for search engines
+- `/up` - Health check endpoint for monitoring
+
+## Available Data
+
+### Real-Time Rate Information
+- **Interest Rates**: Current rates from all tracked institutions (updated daily)
+- **Term Lengths**: 1 month, 3 months, 4 months, 5 months, 6 months, 9 months, 12 months, 18 months, 2 years, 3 years, 4 years, 5 years
+- **Minimum Deposits**: Required minimum amounts for each bank/term combination
+- **Credit Ratings**: Bank stability ratings and risk assessments
+- **Rate Types**: Regular term deposits and PIE (Portfolio Investment Entity) products
+- **Last Updated**: Precise timestamp of most recent data collection
+
+### Financial Institution Coverage
+Currently tracking **15+ major institutions** including:
+- Big Four Banks: ANZ, ASB, BNZ, Westpac
+- Domestic Banks: Kiwibank, TSB Bank, SBS Bank
+- Specialist Banks: Heartland Bank, Co-operative Bank, Rabobank
+- International Banks: Bank of China, ICBC, Bank of India, Bank of Baroda, China Construction Bank
+
+### Data Granularity
+- Bank-specific rates for each term length
+- Rate change history and trends
+- Minimum deposit requirements (ranging from hundreds to thousands)
+- Interest payment options (monthly, quarterly, annually, at maturity)
+- Tax implications and PIE structures
+
+## Interactive Features
+
+### Advanced Rate Calculator
+- **Dynamic Calculations**: Real-time interest calculations with Chart.js visualizations
+- **Comparison Mode**: Side-by-side bank rate comparisons
+- **Payment Scenarios**: Simple vs compound interest modeling
+- **Growth Projections**: Visual timeline charts showing balance growth
+- **Bank Selection**: Filter by specific institutions or compare all
+- **Term Flexibility**: Calculate for any available term length
+
+### Smart Data Tables  
+- **Sortable Columns**: Click any term length to sort rates high to low
+- **Bank Filtering**: Dynamic dropdown to filter by institution
+- **Matrix View**: Complete overview of all rates in tabular format
+- **Mobile Responsive**: Horizontal scrolling for all screen sizes
+- **Real-Time Updates**: Data refreshes with latest scraped information
+
+### Content Delivery
+- **Comprehensive Guides**: In-depth articles on term deposit strategies
+- **FAQ Sections**: Common questions with detailed answers
+- **Market Insights**: Current rate ranges, averages, and trends
+- **Educational Content**: Tax implications, investment strategies, risk analysis
+
+## Update Frequency
+- **Rate Data**: Daily automated scraping of all tracked institutions
+- **Content**: Regular updates to guides and educational materials
+- **Market Analysis**: Dynamic insights based on current data trends
+- **Bank Information**: Ongoing monitoring of product changes and new offerings
+
+## Technical Capabilities
+- **Responsive Design**: Optimized for all devices and screen sizes
+- **Interactive Features**: Dynamic calculators and sortable comparison tables
+- **Real-Time Data**: Automated daily updates from financial institutions
+- **SEO Optimized**: Structured data and comprehensive sitemaps
+
+## Data Sources
+- **Primary**: Direct scraping from bank websites and rate pages
+- **Validation**: Cross-reference with official bank APIs where available  
+- **Historical**: Maintained database of rate changes over time
+- **Verification**: Daily consistency checks and data validation
+
+## Content Structure
+- **Markdown-Based**: Content management through structured markdown files
+- **Bank Profiles**: Individual bank analysis and product information
+- **Educational Resources**: Step-by-step guides for different investor profiles
+- **Market Commentary**: Regular analysis of rate trends and economic factors
+
+## Use Cases for LLM Integration
+1. **Rate Queries**: "What's the best 2-year term deposit rate today?"
+2. **Bank Comparisons**: "Compare ANZ vs ASB term deposit offerings"
+3. **Investment Planning**: "Calculate returns on $50,000 for 18 months"
+4. **Educational Support**: "Explain the tax implications of PIE vs regular term deposits"
+5. **Market Analysis**: "What are current term deposit rate trends?"
+6. **Product Research**: "Which banks offer the lowest minimum deposits?"
+
+## Limitations
+- **Geographic Scope**: Focused exclusively on New Zealand market
+- **Product Coverage**: Term deposits only (no savings accounts, bonds, or other investments)
+- **Data Delay**: Rates updated daily, not real-time intraday changes
+- **Bank Coverage**: Limited to institutions with publicly available rate information
+- **Historical Data**: Rate history available but not comprehensive for all institutions
+- **Tax Advice**: General information only, not personalized tax advice
+
+## API Access
+No public API currently available. All data access is through web interface.
+
+## Contact and Updates
+Rate data is automatically updated daily. For the most current information, always refer to the live comparison tables on the website. This documentation reflects the technical structure as of September 2025.

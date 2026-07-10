@@ -3,9 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import RateSummary from "../components/RateSummary.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
-import { matrixPageData, logoStripParents } from "../lib/rates";
+import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYear, monthYearShort } from "../lib/format";
 import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
 import { termLengthFaqItems } from "../lib/faq";
@@ -13,6 +14,7 @@ import { termLengthFaqItems } from "../lib/faq";
 const TERM = ["12 mths"];
 const data = matrixPageData({ rateType: "regular", termLengths: TERM });
 const parents = logoStripParents(data.rates);
+const leaders = termLeaders(data.rates, data.latestScrapeAt);
 const stats = data.stats;
 const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
 const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
@@ -61,6 +63,12 @@ const breadcrumbs = [
     terms={data.terms}
     matrix={data.matrix}
     bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <RateSummary
+    heading="Highest 12-month term deposit rate in NZ"
+    leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
 

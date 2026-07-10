@@ -1,0 +1,49 @@
+---
+// Citable summary block for AI answer engines (Claude, ChatGPT, Perplexity,
+// Google AI Overviews). Renders standalone factual sentences — claim + date +
+// named entity — as real server-side HTML (<ul><li>), NOT a table and NOT
+// hydrated, so the sentences are crawlable and quotable. Placed high on every
+// rates page. See termLeaders() / bankLeaderSummary() in src/lib/rates.ts.
+import type { TermLeader } from "../lib/rates";
+import { dayMonthYear } from "../lib/format";
+
+interface Props {
+  heading: string;
+  latestScrapeAt: string | null;
+  leaders?: TermLeader[]; // per-term market leaders (homepage + term pages)
+  bankLines?: string[]; // bank-specific sentences (provider pages)
+  intro?: string; // optional lead-in sentence above the list
+}
+const { heading, latestScrapeAt, leaders = [], bankLines = [], intro } = Astro.props;
+const updated = latestScrapeAt ? dayMonthYear(latestScrapeAt) : null;
+const sentences = bankLines.length ? bankLines : leaders.map((l) => l.sentence);
+---
+{
+  sentences.length > 0 && (
+    <section class="max-w-7xl mx-auto px-4 pt-6">
+      <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6">
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-4">
+          <h2 class="text-xl font-bold text-gray-900">{heading}</h2>
+          {updated && (
+            <p class="text-sm text-gray-500">
+              Rates last updated: <time>{updated}</time>
+            </p>
+          )}
+        </div>
+
+        {intro && <p class="text-gray-600 mb-4">{intro}</p>}
+
+        <ul class="space-y-2">
+          {sentences.map((s) => (
+            <li class="text-gray-800 leading-relaxed flex gap-2">
+              <span class="text-blue-500 flex-shrink-0" aria-hidden="true">
+                •
+              </span>
+              <span>{s}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

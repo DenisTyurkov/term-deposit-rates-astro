@@ -4,8 +4,9 @@ import Layout from "../layouts/Layout.astro";
 import BankLogo from "../components/BankLogo.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import RateSummary from "../components/RateSummary.astro";
 import { logoFor } from "../lib/logos";
-import { allProviders, providerPageData } from "../lib/rates";
+import { allProviders, providerPageData, matrixPageData, termLeaders, bankLeaderSummary } from "../lib/rates";
 import { pct, delimited, longDateTime, monthYearShort } from "../lib/format";
 import { bankOrganizationSchema, collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
 import { providerFaqItems } from "../lib/faq";
@@ -23,6 +24,13 @@ const allRates = data.products.flatMap((p) => p.rates);
 
 const pageUrl = `${ROOT_URL}/${provider.slug}/`;
 const updated = data.latestScrapeAt;
+
+// Bank-specific citable sentences (claim + date + named entity), rendered as
+// real HTML above the tables so AI answer engines can quote them. National-lead
+// flags come from comparing this bank's rates against the whole regular market.
+const marketLeaders = termLeaders(matrixPageData({ rateType: "regular" }).rates, updated);
+const summary = bankLeaderSummary(provider.name, allRates, marketLeaders, updated);
+const bankLines = summary ? [summary.headline, ...summary.nationalLeads] : [];
 const monthLabel = monthYearShort(updated ?? new Date().toISOString());
 
 // Best current rate for this bank (drives a keyword-rich, click-worthy title).
@@ -87,6 +95,12 @@ const Content = entry ? (await render(entry)).Content : null;
       </div>
     </div>
   </div>
+
+  <RateSummary
+    heading={`${provider.name} term deposit rates at a glance`}
+    bankLines={bankLines}
+    latestScrapeAt={updated}
+  />
 
   <!-- Rates Section -->
   <div class="max-w-7xl mx-auto px-4 py-8">

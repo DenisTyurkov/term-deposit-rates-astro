@@ -20,6 +20,7 @@
 
 import Database from "better-sqlite3";
 import { join } from "node:path";
+import { pct, dayMonthYear } from "./format";
 
 // Anchored to the project root (cwd during `astro build` / scrape), not the
 // bundled module location — Vite moves this file into dist/.prerender/chunks.
@@ -413,6 +414,109 @@ export function rateStats(rates: Rate[], banks: BankInfo[], terms: string[]): Ra
     bankCount: banks.length,
     termCount: terms.length,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Term leaders — standalone "citable" sentences for AI answer engines.
+//
+// AI systems extract single self-contained sentences that pair a specific
+// claim + a date + a named entity; they don't parse rate tables well. These
+// helpers turn the live data into plain-text sentences rendered as real HTML
+// (see RateSummary.astro), e.g.:
+//   "As of 23 June 2026, the highest 12-month term deposit rate in NZ is
+//    4.50%, offered by SBS Bank."
+// ---------------------------------------------------------------------------
+
+/** Human term label from a DB term string: "12 mths" → "12-month", "2 years" → "2-year". */
+export function termLabel(term: string): string {
+  const months = termInMonths(term);
+  if (months === 0) return term;
+  return months < 24 ? `${months}-month` : `${months / 12}-year`;
+}
+
+/** Join cleaned bank names into a natural-language list, collapsing long ties. */
+function joinBanks(names: string[]): string {
+  const n = names.length;
+  if (n === 0) return "";
+  if (n === 1) return names[0];
+  if (n === 2) return `${names[0]} and ${names[1]}`;
+  if (n === 3) return `${names[0]}, ${names[1]} and ${names[2]}`;
+  const others = n - 3;
+  return `${names[0]}, ${names[1]}, ${names[2]} and ${others} other bank${others === 1 ? "" : "s"}`;
+}
+
+export interface TermLeader {
+  term: string; // raw DB term_length, e.g. "12 mths"
+  termLabel: string; // human, e.g. "12-month"
+  rate: number; // highest interest_rate for this term
+  banks: string[]; // cleaned display names of the leader(s) (ties)
+  sentence: string; // full standalone citable sentence
+}
+
+/**
+ * The market-leading rate per term, as standalone sentences. Terms are returned
+ * in sortTerms() order. `banks` holds every leader when rates tie.
+ */
+export function termLeaders(rates: Rate[], asOfIso: string | null): TermLeader[] {
+  const asOf = asOfIso ? dayMonthYear(asOfIso) : "today";
+  const byTerm = groupBy(rates, (r) => r.term_length);
+  const leaders: TermLeader[] = [];
+  for (const term of sortTerms([...byTerm.keys()])) {
+    const termRates = byTerm.get(term)!;
+    const maxRate = Math.max(...termRates.map((r) => r.interest_rate));
+    // Dedupe leader display names (variants of one bank can repeat).
+    const banks = [
+      ...new Set(termRates.filter((r) => r.interest_rate === maxRate).map((r) => cleanBankName(displayName(r)))),
+    ].sort();
+    const label = termLabel(term);
+    leaders.push({
+      term,
+      termLabel: label,
+      rate: maxRate,
+      banks,
+      sentence: `As of ${asOf}, the highest ${label} term deposit rate in NZ is ${pct(maxRate)}, offered by ${joinBanks(banks)}.`,
+    });
+  }
+  return leaders;
+}
+
+export interface BankLeaderSummary {
+  headline: string; // "As of <date>, <Bank>'s highest term deposit rate is X% for a Y-month term."
+  nationalLeads: string[]; // sentences for terms where this bank leads NZ
+}
+
+/**
+ * Bank-specific citable sentences for a provider page. `allRates` is that bank's
+ * latest rows; `marketLeaders` is termLeaders() over the whole regular market so
+ * we can flag where the bank holds the national lead.
+ */
+export function bankLeaderSummary(
+  bankName: string,
+  allRates: Rate[],
+  marketLeaders: TermLeader[],
+  asOfIso: string | null
+): BankLeaderSummary | null {
+  if (!allRates.length) return null;
+  const asOf = asOfIso ? dayMonthYear(asOfIso) : "today";
+  const best = maxBy(allRates, (r) => r.interest_rate);
+  const headline = `As of ${asOf}, ${bankName}'s highest term deposit rate is ${pct(best.interest_rate)} for a ${termLabel(best.term_length)} term.`;
+
+  // This bank's own best rate per term, so we can flag national leads by value
+  // (robust against parent/variant display-name differences).
+  const bankMaxByTerm = new Map<string, number>();
+  for (const r of allRates) {
+    const cur = bankMaxByTerm.get(r.term_length);
+    if (cur == null || r.interest_rate > cur) bankMaxByTerm.set(r.term_length, r.interest_rate);
+  }
+  const nationalLeads: string[] = [];
+  for (const leader of marketLeaders) {
+    if (leader.rate > 0 && bankMaxByTerm.get(leader.term) === leader.rate) {
+      nationalLeads.push(
+        `${bankName} currently offers New Zealand's highest ${leader.termLabel} term deposit rate at ${pct(leader.rate)}.`
+      );
+    }
+  }
+  return { headline, nationalLeads };
 }
 
 // ---------------------------------------------------------------------------

@@ -3,10 +3,11 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import RateSummary from "../components/RateSummary.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
 import BankLogo from "../components/BankLogo.astro";
 import { logoFor } from "../lib/logos";
-import { matrixPageData, logoStripParents } from "../lib/rates";
+import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYear, monthYearShort, dayMonthYear, delimited } from "../lib/format";
 import {
   faqSchema,
@@ -18,6 +19,7 @@ import {
 
 const data = matrixPageData({ rateType: "regular" });
 const parents = logoStripParents(data.rates);
+const leaders = termLeaders(data.rates, data.latestScrapeAt);
 const stats = data.stats;
 const spread = stats.maxRate - stats.minRate;
 const updatedMonthYear = data.latestScrapeAt ? monthYear(data.latestScrapeAt) : "";
@@ -78,6 +80,13 @@ const jsonLd = [
     terms={data.terms}
     matrix={data.matrix}
     bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <RateSummary
+    heading="Highest term deposit rates in NZ, by term"
+    intro="The current market-leading term deposit rate for each term length, updated daily from every major New Zealand bank."
+    leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
 

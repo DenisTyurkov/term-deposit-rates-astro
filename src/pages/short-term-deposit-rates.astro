@@ -4,9 +4,10 @@ import Layout from "../layouts/Layout.astro";
 import BankLogoStrip from "../components/BankLogoStrip.astro";
 import SummaryCards from "../components/SummaryCards.astro";
 import RatesMatrix from "../components/RatesMatrix.astro";
+import RateSummary from "../components/RateSummary.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
-import { matrixPageData, logoStripParents } from "../lib/rates";
+import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYearShort } from "../lib/format";
 import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
 import { shortTermFaqItems } from "../lib/faq";
@@ -14,6 +15,7 @@ import { shortTermFaqItems } from "../lib/faq";
 const SHORT_TERMS = ["1 month", "3 months", "4 months", "5 months", "6 months", "9 months", "12 mths"];
 const data = matrixPageData({ rateType: "regular", termLengths: SHORT_TERMS });
 const parents = logoStripParents(data.rates);
+const leaders = termLeaders(data.rates, data.latestScrapeAt);
 
 const pageUrl = `${ROOT_URL}/short-term-deposit-rates/`;
 const title = `Best Short-Term Deposit Rates NZ ${data.latestScrapeAt ? monthYearShort(data.latestScrapeAt) : ""} — 1 to 12 Months`;
@@ -62,6 +64,13 @@ const Content = entry ? (await render(entry)).Content : null;
     terms={data.terms}
     matrix={data.matrix}
     bestRates={data.bestRates}
+    latestScrapeAt={data.latestScrapeAt}
+  />
+
+  <RateSummary
+    heading="Highest short-term deposit rates in NZ, by term"
+    intro="The market-leading rate for each short term (1 to 12 months), updated daily from every major New Zealand bank."
+    leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
 

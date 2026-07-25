@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -48,6 +48,19 @@ export default defineConfig({
   // Canonical production host — kept identical to the live Rails site.
   site: 'https://www.termdepositrates.co.nz',
   output: 'static',
+  env: {
+    schema: {
+      // nz-leads cross-site lead intake endpoint (the /best-rate-finder quiz
+      // POSTs leads here). Public — it's inlined into the client bundle either
+      // way. The default is committed so Cloudflare builds need no env config;
+      // set the env var only to point a dev build at a local nz-leads server.
+      PUBLIC_LEAD_INTAKE_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        default: 'https://www.broadband.co.nz/api/leads/intake',
+      }),
+    },
+  },
   integrations: [
     sitemap({
       // Mirror the priorities/changefreq the old Rails seo#sitemap builder used.

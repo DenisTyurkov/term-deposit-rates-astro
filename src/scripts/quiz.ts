@@ -9,6 +9,7 @@
  * same rules as src/lib/leadValidation.ts, so anything we accept, it accepts.
  */
 
+import { PUBLIC_LEAD_INTAKE_URL } from "astro:env/client";
 import { isValidEmail, isValidPhone, normalizePhone } from "../lib/leadValidation";
 
 interface FinderRate {
@@ -25,12 +26,6 @@ interface QuizData {
 }
 
 const TOTAL_STEPS = 5;
-
-// The endpoint is public (it ends up in the shipped bundle either way), so the
-// production URL is committed here rather than living in deploy config.
-// PUBLIC_LEAD_INTAKE_URL overrides it at build time — e.g. a local nz-leads
-// dev server — never unsets it.
-const INTAKE_URL = import.meta.env.PUBLIC_LEAD_INTAKE_URL || "https://www.broadband.co.nz/api/leads/intake";
 
 function dataLayerPush(event: Record<string, unknown>): void {
   const w = window as any;
@@ -166,7 +161,7 @@ function initQuiz(): void {
 
     submitBtn.disabled = true;
     try {
-      const response = await fetch(INTAKE_URL, {
+      const response = await fetch(PUBLIC_LEAD_INTAKE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

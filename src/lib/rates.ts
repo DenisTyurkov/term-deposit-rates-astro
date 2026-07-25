@@ -557,6 +557,66 @@ export function matrixPageData(opts: { rateType: RateType; termLengths?: string[
 }
 
 // ---------------------------------------------------------------------------
+// Rate-finder data (the /best-rate-finder quiz's reward step)
+// ---------------------------------------------------------------------------
+
+export interface FinderRate {
+  bank: string; // cleaned display name
+  term: string; // raw DB term_length
+  termLabel: string; // human, e.g. "12-month"
+  rate: number;
+  minDeposit: number | null; // dollars
+}
+
+export type FinderBucket = "under6" | "m6to12" | "y1to2" | "y2plus";
+
+export interface RateFinderData {
+  latestScrapeAt: string | null;
+  buckets: Record<FinderBucket, FinderRate[]>;
+}
+
+function finderBucket(term: string): FinderBucket {
+  const months = termInMonths(term);
+  if (months < 6) return "under6";
+  if (months <= 12) return "m6to12";
+  if (months <= 24) return "y1to2";
+  return "y2plus";
+}
+
+/**
+ * Latest regular rates grouped into the quiz's term buckets, one entry per bank
+ * (its best rate in the bucket), sorted by rate descending. The client island
+ * filters by the visitor's deposit amount and shows the top 3.
+ */
+export function rateFinderData(): RateFinderData {
+  const rates = latestRates({ rateType: "regular" });
+  const buckets: Record<FinderBucket, FinderRate[]> = { under6: [], m6to12: [], y1to2: [], y2plus: [] };
+
+  const bestPerBankPerBucket = new Map<string, Rate>();
+  for (const r of rates) {
+    const key = `${finderBucket(r.term_length)}|${cleanBankName(displayName(r))}`;
+    const cur = bestPerBankPerBucket.get(key);
+    if (!cur || r.interest_rate > cur.interest_rate) bestPerBankPerBucket.set(key, r);
+  }
+
+  for (const [key, r] of bestPerBankPerBucket) {
+    const bucket = key.split("|")[0] as FinderBucket;
+    buckets[bucket].push({
+      bank: cleanBankName(displayName(r)),
+      term: r.term_length,
+      termLabel: termLabel(r.term_length),
+      rate: r.interest_rate,
+      minDeposit: r.minimum_deposit != null ? Math.trunc(r.minimum_deposit / 100) : null,
+    });
+  }
+  for (const bucket of Object.keys(buckets) as FinderBucket[]) {
+    buckets[bucket].sort((a, b) => b.rate - a.rate);
+  }
+
+  return { latestScrapeAt: latestScrapeAt("regular"), buckets };
+}
+
+// ---------------------------------------------------------------------------
 // Calculator data (port of CalculatorController)
 // ---------------------------------------------------------------------------
 

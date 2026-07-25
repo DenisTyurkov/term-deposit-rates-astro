@@ -46,7 +46,9 @@ src/lib/schema.ts   JSON-LD builders
 src/content/        Astro Content Collections — providers/*.md and pages/*.md (pure markdown bodies)
 src/pages/*.astro   prerendered routes; [slug].astro uses getStaticPaths() for provider pages
 src/components/     .astro presentation components
-src/scripts/calculator.ts   the one client island (term-deposit calculator)
+src/scripts/        vanilla-TS client islands: calculator.ts (term-deposit calculator) and
+                    quiz.ts (/best-rate-finder lead-capture quiz → nz-leads intake endpoint);
+                    RatesMatrix.astro carries a third, inline (table sort/filter)
 .github/workflows/scrape.yml  daily cron: scrape → build → commit db → push
 wrangler.jsonc      assets-only Worker: uploads ./dist; NO Astro adapter
 ```
@@ -81,7 +83,8 @@ decision to raise explicitly, not an adapter add (see the data-layer ladder in `
 
 ## UI and Styling
 - Tailwind CSS (config in `tailwind.config.mjs`, `@tailwindcss/typography` for markdown bodies).
-- Responsive, accessible markup. Keep client JS to the single calculator island — everything else
+- Responsive, accessible markup. Keep client JS to the existing islands (calculator, rates-table
+  sort/filter, rate-finder quiz) — everything else
   is static HTML. Do not reach for a framework or hydration where static output suffices.
 
 ## Error Handling
@@ -93,7 +96,7 @@ decision to raise explicitly, not an adapter add (see the data-layer ladder in `
 There is no unit-test framework yet. Verification is build + preview + deploy dry-run.
 
 ### After Implementation:
-- **ALWAYS build**: `npm run build` (must produce all 20 pages with no errors).
+- **ALWAYS build**: `npm run build` (must produce all pages — currently 24 — with no errors).
 - **Preview**: `npm run preview` and check the affected pages render correctly.
 - **Scraper changes**: `npm run scrape -- --dry-run` (prints a summary, writes nothing) before a
   real `npm run scrape`. Re-verify cheerio selectors against live interest.co.nz HTML.
@@ -136,7 +139,7 @@ There is no unit-test framework yet. Verification is build + preview + deploy dr
 - [ ] No Cloudflare adapter / no runtime use of better-sqlite3
 
 ### Post-Implementation Checklist:
-- [ ] `npm run build` passes (all 20 pages)
+- [ ] `npm run build` passes (all pages, currently 24)
 - [ ] `npm run preview` manually verified
 - [ ] `npx wrangler deploy --dry-run` clean (when deploy/config touched)
 - [ ] Plan/task file updated with final results

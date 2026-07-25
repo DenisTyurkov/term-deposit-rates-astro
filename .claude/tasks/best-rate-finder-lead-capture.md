@@ -172,3 +172,4 @@ After approval, copy this plan to `.claude/tasks/best-rate-finder-lead-capture.m
   - `src/components/RateFinderCta.astro` (new) — self-contained gradient-blue banner ("Not sure which term deposit is right for you?" + white "Find My Best Rate →" button + "Takes 60 seconds · Free · No obligation" microcopy), own `max-w-7xl` container with `pt-8` only (table below supplies the gap).
   - Placed directly above `<RatesMatrix>` on all 7 matrix pages (index, short/long-term, 6/12-month, pie, seniors) and above the products table in `[slug].astro` — 22 built pages carry it.
   - Verified: build green (24 pages); preview screenshots of homepage + ANZ provider page show correct placement/spacing.
+  - **Design revision (Denis):** rebuilt the banner in the SummaryCards idiom — `from-blue-50 to-cyan-100` gradient, `border-blue-300`, left accent bar (`from-blue-400 to-cyan-500`), 🎯 icon, gray-900/gray-600 text; only the button is solid blue-600. Verified visually on preview.

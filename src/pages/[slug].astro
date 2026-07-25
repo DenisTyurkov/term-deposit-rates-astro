@@ -5,6 +5,7 @@ import BankLogo from "../components/BankLogo.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
 import RateSummary from "../components/RateSummary.astro";
+import RateFinderCta from "../components/RateFinderCta.astro";
 import { logoFor } from "../lib/logos";
 import { allProviders, providerPageData, matrixPageData, termLeaders, bankLeaderSummary } from "../lib/rates";
 import { pct, delimited, longDateTime, monthYearShort } from "../lib/format";
@@ -101,6 +102,8 @@ const Content = entry ? (await render(entry)).Content : null;
     bankLines={bankLines}
     latestScrapeAt={updated}
   />
+
+  <RateFinderCta />
 
   <!-- Rates Section -->
   <div class="max-w-7xl mx-auto px-4 py-8">

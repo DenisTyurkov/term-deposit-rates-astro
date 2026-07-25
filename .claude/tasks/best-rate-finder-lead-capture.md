@@ -167,3 +167,8 @@ After approval, copy this plan to `.claude/tasks/best-rate-finder-lead-capture.m
   - Production smoke tests: preflight from www + bare TD origins → 204 + ACAO echoed; evil origin → no ACAO; POST without Origin → 403; honeypot → 200 `{id:null}` stored nothing; bad email → 400.
   - Real test lead (phone `0209199299`, Veriphone bypass) → visitor `6a6453b29e422d94a8534972` — **confirmed by Denis in Payload admin AND in ActiveCampaign** (Wise_Content_leads list, new_subscribers_tdrates tag). Deletion of the test visitor + AC contact is Denis's remaining cleanup.
   - Open follow-ups (not blocking): ask LeavyStudio what feeds the daily broadband→AC sync; add auth to `/api/leads/json` (serves 7 days of lead PII unauthenticated).
+
+- [x] **Follow-up — RateFinderCta banner above every rates table (2026-07-25)**
+  - `src/components/RateFinderCta.astro` (new) — self-contained gradient-blue banner ("Not sure which term deposit is right for you?" + white "Find My Best Rate →" button + "Takes 60 seconds · Free · No obligation" microcopy), own `max-w-7xl` container with `pt-8` only (table below supplies the gap).
+  - Placed directly above `<RatesMatrix>` on all 7 matrix pages (index, short/long-term, 6/12-month, pie, seniors) and above the products table in `[slug].astro` — 22 built pages carry it.
+  - Verified: build green (24 pages); preview screenshots of homepage + ANZ provider page show correct placement/spacing.

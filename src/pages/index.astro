@@ -50,7 +50,7 @@ const half = Math.ceil(data.banks.length / 2);
 const bankGroups = [data.banks.slice(0, half), data.banks.slice(half)];
 
 const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString());
-const title = `Best Term Deposit Rates NZ ${monthLabel} — Compare & Find the Highest Rates`;
+const title = `Term Deposit Rates NZ ${monthLabel} — Compare & Find the Highest Rates`;
 const description = `Compare the best term deposit (fixed deposit) rates from every major NZ bank — ANZ, ASB, BNZ, Westpac, Kiwibank and more. Find the highest interest rate for your term, from ${stats.minRate.toFixed(2)}% to ${stats.maxRate.toFixed(2)}%. Updated daily.`;
 
 const jsonLd = [
@@ -63,7 +63,7 @@ const jsonLd = [
   <div class="bg-white">
     <div class="max-w-7xl mx-auto px-4 py-8">
       <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Best Term Deposit Rates in New Zealand</h1>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Term Deposit Rates in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
           Compare the highest term deposit (fixed deposit) interest rates from the major NZ banks. <br />
           Updated daily so you can see which bank is paying the most for your chosen term.

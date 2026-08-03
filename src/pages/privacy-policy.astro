@@ -1,0 +1,143 @@
+---
+// Privacy Act 2020 collection notice + privacy statement.
+//
+// DRAFT — written to close the dead footer link and to satisfy IPP 3 (telling
+// people, at the point of collection, who is collecting, why, who receives it,
+// and their access/correction rights). The /best-rate-finder quiz links here
+// from its consent block. Have a NZ privacy lawyer review before treating this
+// as final; the placeholders below (contact address, partner list) need real
+// values.
+import Layout from "../layouts/Layout.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import { ROOT_URL } from "../lib/schema";
+
+const pageUrl = `${ROOT_URL}/privacy-policy/`;
+const title = "Privacy Policy — TermDepositRates.co.nz";
+const description =
+  "How TermDepositRates.co.nz collects, uses, shares and stores your personal information, and how to access or correct it under the Privacy Act 2020.";
+
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "Privacy Policy", url: pageUrl },
+];
+
+const lastUpdated = "3 August 2026";
+---
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
+    <p class="text-sm text-gray-500 mb-8">Last updated: {lastUpdated}</p>
+
+    <div class="prose prose-gray max-w-none">
+      <p class="text-lg text-gray-600">
+        This policy explains how TermDepositRates.co.nz collects, uses, shares and protects your
+        personal information. We handle personal information in accordance with the
+        <a href="https://www.privacy.org.nz/">Privacy Act 2020</a>.
+      </p>
+
+      <h2>What we collect</h2>
+      <p>You can browse and compare every rate on this site without giving us any personal information.</p>
+      <p>If you use our <a href="/best-rate-finder">rate finder</a>, we collect:</p>
+      <ul>
+        <li><strong>Contact details</strong> you enter: your name, email address and phone number.</li>
+        <li>
+          <strong>Your answers</strong> to the four questions: your deposit size band, the term you're
+          comparing, who you currently bank with, and when you're looking to open a deposit.
+        </li>
+        <li>
+          <strong>Technical and marketing data</strong> collected automatically: the page that referred
+          you, and advertising click identifiers (<code>gclid</code>, <code>msclkid</code>) and campaign
+          source (<code>utm_source</code>) where present in the link you arrived on.
+        </li>
+      </ul>
+      <p>
+        We also use Google Tag Manager and associated analytics cookies to understand how the site is
+        used. You can control cookies through your browser settings.
+      </p>
+
+      <h2>Why we collect it</h2>
+      <p>We use your personal information to:</p>
+      <ul>
+        <li>send you the rate summary you requested;</li>
+        <li>send you occasional updates when higher rates become available;</li>
+        <li>
+          share with our trusted partners so they can contact you by email, phone or text about term
+          deposits and other products and services; and
+        </li>
+        <li>measure and improve the performance of the site and our advertising.</li>
+      </ul>
+      <p>
+        Providing your details is voluntary. If you don't want to give them to us, you can still see
+        every rate we hold on our <a href="/">main comparison table</a> and our other rate pages.
+      </p>
+
+      <h2>Who we share it with</h2>
+      <p>We share your personal information with:</p>
+      <ul>
+        <li>
+          <strong>Our trusted partners</strong> — providers we select who may contact you about term
+          deposits and other products and services, which can include providers in other sectors such
+          as telecommunications and energy.
+        </li>
+        <li>
+          <strong>Our service providers</strong>, who process information on our behalf. These include
+          ActiveCampaign (email delivery and contact management, which stores data outside New Zealand)
+          and Google (analytics and tag management).
+        </li>
+        <li>
+          <strong>Anyone else</strong> where you have authorised it, or where we are required or
+          permitted to disclose by law.
+        </li>
+      </ul>
+      <p>
+        Some of these providers are based overseas, so your information may be stored outside New
+        Zealand. We take reasonable steps to ensure it is protected by comparable safeguards.
+      </p>
+
+      <h2>Marketing and unsubscribing</h2>
+      <p>
+        Every marketing email we send includes an unsubscribe link, and we act on unsubscribe requests
+        promptly. If you no longer want to be contacted by our partners, contact us and we will remove
+        you from future distribution — you may also need to tell the partner directly, as they hold
+        their own copy of your details.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <p>
+        We keep your personal information for as long as we need it for the purposes above, and then
+        only for as long as we are required to keep it by law.
+      </p>
+
+      <h2>Accessing and correcting your information</h2>
+      <p>
+        Under the Privacy Act 2020 you have the right to ask us for a copy of the personal information
+        we hold about you, and to ask us to correct it if it's wrong. Contact us using the details
+        below and we will respond within 20 working days.
+      </p>
+
+      <h2>Keeping it safe</h2>
+      <p>
+        We take reasonable steps to protect your personal information from loss, misuse and unauthorised
+        access or disclosure. No system is completely secure, so we cannot guarantee absolute security.
+      </p>
+
+      <h2>Contact us</h2>
+      <p>
+        To access or correct your information, unsubscribe, or make a privacy complaint, contact us at
+        <strong>[privacy@termdepositrates.co.nz — confirm before publishing]</strong>.
+      </p>
+      <p>
+        If you're not satisfied with our response, you can complain to the Office of the Privacy
+        Commissioner at <a href="https://www.privacy.org.nz/">privacy.org.nz</a>.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. The "last updated" date at the top shows when it
+        was last changed.
+      </p>
+    </div>
+  </div>
+
+  <RelatedLinks exclude="/privacy-policy" />
+</Layout>

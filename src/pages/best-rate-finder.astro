@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import BankLogo from "../components/BankLogo.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import Disclaimer from "../components/Disclaimer.astro";
 import { rateFinderData } from "../lib/rates";
 import { longDateTime } from "../lib/format";
 import { webApplicationSchema, ROOT_URL } from "../lib/schema";
@@ -9,14 +10,14 @@ import { webApplicationSchema, ROOT_URL } from "../lib/schema";
 const finder = rateFinderData();
 const pageUrl = `${ROOT_URL}/best-rate-finder/`;
 
-const title = "Best Term Deposit Rate Finder NZ — Your Rate in 60 Seconds";
+const title = "Term Deposit Rate Finder NZ — Compare the Highest Rates in 60 Seconds";
 const description =
-  "Answer four quick questions and we'll match you with today's best NZ term deposit rates for your amount and term. Live rates from every major bank, updated daily.";
+  "Answer four quick questions to see the highest published NZ term deposit rates for your deposit size and term. Rates from major NZ banks, updated daily. Information only — not financial advice.";
 
 const jsonLd = [
   webApplicationSchema(
     "Term Deposit Rate Finder",
-    "Answer four quick questions to find the best NZ term deposit rates for your deposit amount and term. Live rates from every major bank, updated daily.",
+    "Filters published NZ term deposit rates by deposit size and term length, ranked by interest rate. Updated daily. Provides factual rate information only, not financial advice.",
     pageUrl
   ),
 ];
@@ -38,10 +39,10 @@ const amountOptions = [
   { value: "$100k+", bound: 100000, hint: "Large deposit" },
 ];
 const termOptions = [
-  { value: "Under 6 months", bucket: "under6", hint: "Quick access to funds" },
-  { value: "6–12 months", bucket: "m6to12", hint: "The most popular range" },
-  { value: "1–2 years", bucket: "y1to2", hint: "Lock in a solid rate" },
-  { value: "2+ years", bucket: "y2plus", hint: "Maximum certainty" },
+  { value: "Under 6 months", bucket: "under6", hint: "Shortest fixed terms" },
+  { value: "6–12 months", bucket: "m6to12", hint: "The most commonly chosen range" },
+  { value: "1–2 years", bucket: "y1to2", hint: "Medium fixed terms" },
+  { value: "2+ years", bucket: "y2plus", hint: "Longest fixed terms" },
 ];
 const bankOptions = ["ANZ", "ASB", "BNZ", "Westpac", "Kiwibank", "TSB Bank"];
 const timingOptions = [
@@ -57,10 +58,10 @@ const optionClass =
 <Layout title={title} description={description} jsonLd={jsonLd} breadcrumbs={breadcrumbs}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">Find Your Best Term Deposit Rate</h1>
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Find the Highest Term Deposit Rates for Your Amount and Term</h1>
       <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-        Answer four quick questions and we'll match you with today's best rates for your
-        deposit amount and term — from every major NZ bank.
+        Answer four quick questions and we'll show you the highest published rates for that
+        deposit size and term, ranked by interest rate.
       </p>
       {finder.latestScrapeAt && (
         <p class="text-sm text-gray-500 mt-2">Rates last updated: {longDateTime(finder.latestScrapeAt)}</p>
@@ -109,7 +110,7 @@ const optionClass =
         </fieldset>
 
         <fieldset data-quiz-step="2" hidden>
-          <legend class="text-xl font-semibold text-gray-900 mb-4">How long do you want to invest for?</legend>
+          <legend class="text-xl font-semibold text-gray-900 mb-4">What term are you comparing?</legend>
           <div class="space-y-3">
             {termOptions.map((opt) => (
               <button type="button" class={optionClass} data-quiz-option data-answer="quiz_term_length"
@@ -146,7 +147,7 @@ const optionClass =
         </fieldset>
 
         <fieldset data-quiz-step="4" hidden>
-          <legend class="text-xl font-semibold text-gray-900 mb-4">When are you looking to invest?</legend>
+          <legend class="text-xl font-semibold text-gray-900 mb-4">When are you looking to open a deposit?</legend>
           <div class="space-y-3">
             {timingOptions.map((opt) => (
               <button type="button" class={optionClass} data-quiz-option data-answer="quiz_goal_timing"
@@ -161,7 +162,7 @@ const optionClass =
         <fieldset data-quiz-step="5" hidden>
           <legend class="text-xl font-semibold text-gray-900 mb-1">Where should we send your rate summary?</legend>
           <p class="text-sm text-gray-600 mb-4">
-            See your matched rates instantly — we'll also send you the summary and let you know when better rates appear.
+            See your rates instantly — we'll also email you the summary and let you know when higher rates appear.
           </p>
 
           <div class="hidden" aria-hidden="true">
@@ -190,11 +191,14 @@ const optionClass =
 
           <button type="submit" data-quiz-submit
             class="w-full mt-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold text-lg py-3 px-6 rounded-lg transition-colors">
-            Show My Best Rates
+            Show Matching Rates
           </button>
-          <p class="text-xs text-gray-500 mt-3 text-center">
-            By submitting you agree to receive your personalised rate summary and occasional rate updates by email.
-            Unsubscribe anytime. We never share your details with third parties.
+          <p class="text-xs text-gray-500 mt-3">
+            We collect your name and contact details to send you this rate summary and occasional rate
+            updates, and to share with our trusted partners so they can contact you by email, phone
+            or text about term deposits and other products and services. You can
+            unsubscribe at any time. For more information, see our
+            <a href="/privacy-policy" class="text-blue-600 underline">Privacy Policy</a>.
           </p>
         </fieldset>
       </form>
@@ -202,7 +206,7 @@ const optionClass =
       <div data-quiz-results hidden>
         <div class="text-center mb-6">
           <div class="text-4xl mb-2">🎉</div>
-          <h2 class="text-2xl font-bold text-gray-900" data-quiz-results-heading>Your best rates</h2>
+          <h2 class="text-2xl font-bold text-gray-900" data-quiz-results-heading>Highest published rates for your selection</h2>
           <p class="text-gray-600 mt-1" data-quiz-results-sub></p>
         </div>
         <div class="space-y-3" data-quiz-results-list></div>
@@ -215,8 +219,10 @@ const optionClass =
     </div>
 
     <p class="text-center text-sm text-gray-500 mt-6">
-      Free to use. Rates are sourced daily from public bank data — we don't sell your details.
+      Free to use. Rates are collected once a day and may not match a bank's current offer.
     </p>
+
+    <Disclaimer class="mt-6" />
   </div>
 
   <RelatedLinks exclude="/best-rate-finder" />

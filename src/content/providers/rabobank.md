@@ -35,4 +35,4 @@ Rabobank's main point of difference is its online, branch-light model paired wit
 
 ### Key risks and considerations
 
-Locking in a fixed rate gives certainty but means you cannot benefit if rates rise during the term, and inflation can erode real returns. Your money stays committed for the agreed period, with penalties common for early access. Check the current New Zealand deposit protection arrangements that apply to Rabobank, and confirm all figures with the bank, as nothing here is a guarantee of returns.
+Locking in a fixed rate gives certainty but means you cannot benefit if rates rise during the term, and inflation can erode real returns. Your money stays committed for the agreed period, with penalties common for early access. Deposits with a licensed deposit taker are covered by the Depositor Compensation Scheme up to $100,000 per depositor, per institution; amounts above that are not — confirm the position that applies to Rabobank. None of the above is financial advice or a guarantee of returns; confirm all figures with the bank before investing.

@@ -212,7 +212,7 @@ export const homepageFaqItems: FaqItem[] = [
   {
     question: "Are term deposits covered by government guarantee?",
     answer:
-      "New Zealand doesn't currently have a government deposit guarantee scheme. However, the Reserve Bank of New Zealand regulates banks and monitors their financial stability. Check the credit ratings and financial strength of any institution before investing.",
+      "Since 1 July 2025, the Depositor Compensation Scheme protects up to $100,000 per depositor, per licensed deposit taker, if that institution fails. It is administered by the Reserve Bank of New Zealand under the Deposit Takers Act 2023 and covers standard products including term deposits. Amounts above $100,000 at any one institution are not covered. Check that your institution is a licensed deposit taker, and consider spreading funds if you hold more than the limit.",
   },
   {
     question: "Can I have a joint term deposit?",

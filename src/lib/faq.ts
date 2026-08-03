@@ -130,8 +130,8 @@ export function termLengthFaqItems(label: string): FaqItem[] {
       answer: `The leading ${label} rate moves between banks over time. The table above shows current ${label} term deposit (fixed deposit) rates across major New Zealand banks, ranked so you can spot the best available rate, then confirm it with the bank.`,
     },
     {
-      question: `Is a ${label} term deposit right for me?`,
-      answer: `A ${label} term is a popular middle ground — long enough to earn a competitive fixed rate, short enough that your money isn't locked away for years. It suits a specific savings goal or money you won't need until around then.`,
+      question: `What is a ${label} term deposit typically used for?`,
+      answer: `A ${label} term is a popular middle ground — long enough to earn a competitive fixed rate, short enough that money isn't locked away for years. It's commonly used for a specific savings goal or money not needed until around then. Whether it fits your situation depends on your own circumstances.`,
     },
     {
       question: `What happens at the end of a ${label} term deposit?`,
@@ -182,7 +182,7 @@ export function pieFaqItems(): FaqItem[] {
     {
       question: "Are PIE term deposits as secure as regular term deposits?",
       answer:
-        "PIE term deposits typically offer the same principal protection as traditional term deposits when invested with the same institution. However, verify the specific structure and guarantees with your chosen provider.",
+        "The underlying deposit sits with the same institution, so the credit exposure is much the same. Whether Depositor Compensation Scheme cover applies can depend on how the PIE is structured, so confirm that — and the specific terms — with your chosen provider before investing.",
     },
     {
       question: "Do I need to declare PIE investments in my tax return?",

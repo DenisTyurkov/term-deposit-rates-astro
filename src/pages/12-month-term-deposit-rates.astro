@@ -7,6 +7,7 @@ import RateFinderCta from "../components/RateFinderCta.astro";
 import RateSummary from "../components/RateSummary.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import Disclaimer from "../components/Disclaimer.astro";
 import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYear, monthYearShort } from "../lib/format";
 import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
@@ -23,7 +24,7 @@ const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString(
 const pageUrl = `${ROOT_URL}/12-month-term-deposit-rates/`;
 const title = `Best 12 Month (1 Year) Term Deposit Rates NZ ${monthLabel} — Compare All Banks`;
 const description =
-  "Compare the best 12 month (1 year) term deposit (fixed deposit) rates across every major New Zealand bank. Find the highest 1-year rate. Updated daily.";
+  "Compare 12 month (1 year) term deposit (fixed deposit) rates across major New Zealand banks, ranked highest first. Find the highest published 1-year rate. Updated daily.";
 
 const faqItems = termLengthFaqItems("12-month");
 
@@ -48,7 +49,7 @@ const breadcrumbs = [
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">Best 12 Month (1 Year) Term Deposit Rates in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare 12 month term deposit (fixed deposit) rates from every major NZ bank, ranked highest first.
+          Compare 12 month term deposit (fixed deposit) rates from the major NZ banks we track, ranked highest first.
           The 1-year term is the most popular choice for New Zealand savers. Updated daily.
         </p>
       </div>
@@ -103,6 +104,8 @@ const breadcrumbs = [
   </div>
 
   <Faq items={faqItems} heading="12 Month Term Deposit FAQs" />
+
+  <Disclaimer class="mb-12" />
 
   <RelatedLinks exclude="/12-month-term-deposit-rates" />
 </Layout>

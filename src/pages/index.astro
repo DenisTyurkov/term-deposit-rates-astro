@@ -65,8 +65,8 @@ const jsonLd = [
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">Best Term Deposit Rates in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare the highest term deposit (fixed deposit) interest rates from every major NZ bank. <br />
-          Updated daily to help you find the best rate for your savings.
+          Compare the highest term deposit (fixed deposit) interest rates from the major NZ banks. <br />
+          Updated daily so you can see which bank is paying the most for your chosen term.
         </p>
       </div>
       <BankLogoStrip parents={parents} />
@@ -88,7 +88,7 @@ const jsonLd = [
 
   <RateSummary
     heading="Highest term deposit rates in NZ, by term"
-    intro="The current market-leading term deposit rate for each term length, updated daily from every major New Zealand bank."
+    intro="The highest published term deposit rate for each term length, across the major New Zealand banks we track. Collected once a day from published rates."
     leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
@@ -100,7 +100,7 @@ const jsonLd = [
         <h2 class="text-3xl font-bold text-gray-900 mb-6">Understanding Term Deposits: Your Complete Guide to Fixed-Rate Savings in New Zealand</h2>
 
         <p class="text-lg text-gray-600 mb-6">
-          Term deposits remain one of New Zealand's most popular investment options for conservative savers seeking guaranteed returns.
+          Term deposits remain one of New Zealand's most popular investment options for conservative savers seeking a fixed, predictable return.
           As of {updatedMonthYear}, we track rates from {stats.bankCount} major financial institutions
           across {stats.termCount} different term lengths. Whether you're considering
           <a href="/short-term-deposit-rates" class="text-blue-600 hover:text-blue-800 underline">short-term deposits for flexible savings</a> or
@@ -126,7 +126,7 @@ const jsonLd = [
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">What Are Term Deposits and How Do They Work?</h3>
         <p class="text-gray-600 mb-4">
-          A term deposit is a fixed-term investment where you deposit money with a bank or financial institution for a predetermined period. Terms can vary from short periods of a few months to several years. In exchange for locking away your funds, you receive a guaranteed interest rate that remains fixed for the entire investment term.
+          A term deposit is a fixed-term investment where you deposit money with a bank or financial institution for a predetermined period. Terms can vary from short periods of a few months to several years. In exchange for locking away your funds, you receive an interest rate that is fixed for the entire investment term.
         </p>
         <p class="text-gray-600 mb-4">
           Unlike regular savings accounts where interest rates can change, term deposits provide certainty. When you invest your money at an agreed rate, you know what return you'll receive at maturity.
@@ -134,14 +134,14 @@ const jsonLd = [
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Key Benefits of Term Deposits for New Zealand Investors</h3>
         <p class="text-gray-600 mb-4">Term deposits offer several advantages that make them attractive to risk-averse investors:</p>
-        <p class="text-gray-600 mb-4"><strong>Guaranteed Returns</strong>: Your interest rate is locked in from day one, protecting you from market volatility and rate decreases during your investment term.</p>
-        <p class="text-gray-600 mb-4"><strong>Capital Protection</strong>: Term deposits with New Zealand banks are considered low-risk investments. Your principal amount is secure, and you'll receive it back in full at maturity along with earned interest.</p>
+        <p class="text-gray-600 mb-4"><strong>Fixed Returns</strong>: Your interest rate is locked in from day one, protecting you from market volatility and rate decreases during your investment term. The trade-off is that you don't benefit if rates rise.</p>
+        <p class="text-gray-600 mb-4"><strong>Capital Protection</strong>: Term deposits with New Zealand banks are considered low-risk investments. Your principal is repaid in full at maturity along with earned interest, provided the institution remains solvent. Since 1 July 2025 the Depositor Compensation Scheme covers up to $100,000 per depositor, per licensed deposit taker; amounts above that limit are not covered.</p>
         <p class="text-gray-600 mb-4"><strong>No Management Fees</strong>: Unlike managed funds or KiwiSaver accounts, term deposits typically charge no ongoing fees or establishment costs.</p>
         <p class="text-gray-600 mb-4"><strong>Flexible Terms</strong>: Banks offer various term lengths to match different investment timelines and goals.</p>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Term Deposits vs Savings Accounts: Making the Right Choice</h3>
         <p class="text-gray-600 mb-4">While both options offer secure returns, they serve different purposes in your investment strategy:</p>
-        <p class="text-gray-600 mb-4">Term deposits generally provide higher interest rates in exchange for locking away your money. They're suitable when you have funds you won't need for a specific period and want to maximise returns without risk.</p>
+        <p class="text-gray-600 mb-4">Term deposits generally provide higher interest rates in exchange for locking away your money. They're commonly used for funds you won't need for a specific period. No deposit is risk-free — inflation can erode the real value of a fixed return, your money is illiquid for the term, and cover under the Depositor Compensation Scheme is capped at $100,000 per licensed deposit taker.</p>
         <p class="text-gray-600 mb-4">Savings accounts typically offer lower rates but more flexibility. They're often used for funds you may need to access regularly or at short notice. Many investors use both as part of their overall savings strategy.</p>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
@@ -174,7 +174,7 @@ const jsonLd = [
         <p class="text-gray-600 mb-4">While term deposits are designed to be held until maturity, circumstances may require early access to funds. Breaking a term deposit typically results in:</p>
         <p class="text-gray-600 mb-4"><strong>Reduced Interest</strong>: Most banks apply an interest rate reduction if you withdraw early. The penalty varies between institutions and may depend on how early you withdraw.</p>
         <p class="text-gray-600 mb-4"><strong>Notice Requirements</strong>: Banks often require advance notice for early withdrawals. The notice period varies by institution.</p>
-        <p class="text-gray-600 mb-4"><strong>Principal Protection</strong>: Your original deposit amount is protected - you won't lose your principal, though you may forfeit some or all interest earned.</p>
+        <p class="text-gray-600 mb-4"><strong>Principal Returned</strong>: Breaking a deposit early normally costs you interest rather than principal — your original deposit is returned, though you may forfeit some or all interest earned. Check your bank's specific break conditions, as fees can apply.</p>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Smart Strategies for Term Deposit Investing</h3>
         <p class="text-gray-600 mb-4">
@@ -266,7 +266,7 @@ const jsonLd = [
         <p class="text-gray-600 mb-4">Banks have different policies regarding grace periods and automatic renewals. Some may automatically reinvest your funds if you don't provide instructions, while others may transfer the money to a standard account. Check your bank's specific terms when opening your term deposit to understand their maturity process.</p>
 
         <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Are term deposits covered by government guarantee?</h3>
-        <p class="text-gray-600 mb-4">New Zealand doesn't currently have a government deposit guarantee scheme. However, the Reserve Bank of New Zealand regulates banks and monitors their financial stability. Check the credit ratings and financial strength of any institution before investing.</p>
+        <p class="text-gray-600 mb-4">Since 1 July 2025, the Depositor Compensation Scheme protects up to $100,000 per depositor, per licensed deposit taker, if that institution fails. It is administered by the Reserve Bank of New Zealand under the Deposit Takers Act 2023 and covers standard products including term deposits. Amounts above $100,000 at any one institution are not covered. Check that your institution is a licensed deposit taker, and consider spreading funds if you hold more than the limit.</p>
 
         <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Can I have a joint term deposit?</h3>
         <p class="text-gray-600 mb-4">Many banks offer joint term deposits, though availability varies. Joint accounts typically require both account holders to agree to any changes or early withdrawals. Confirm options with your chosen bank.</p>

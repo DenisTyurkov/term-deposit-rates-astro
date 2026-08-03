@@ -1,6 +1,6 @@
 ## Understanding Short-Term Deposit Rates in New Zealand
 
-Short-term term deposits (12 months or less) offer a conservative investment option for New Zealanders who need relatively quick access to their funds while earning guaranteed returns. <a href="/">Compare current short-term deposit rates</a> from all major New Zealand banks, updated daily to help you find the best rates for your savings strategy. This comprehensive guide covers everything you need to know about short-term deposit rates, strategies, and considerations.
+Short-term term deposits (12 months or less) offer a conservative investment option for New Zealanders who need relatively quick access to their funds while earning a fixed return. <a href="/">Compare current short-term deposit rates</a> from all major New Zealand banks, updated daily to help you find the best rates for your savings strategy. This comprehensive guide covers everything you need to know about short-term deposit rates, strategies, and considerations.
 
 ### What are Short-Term Term Deposits?
 
@@ -9,8 +9,8 @@ Short-term term deposits are fixed-term savings products where you invest money 
 **Key characteristics of short-term deposits:**
 - **Term lengths**: 3 months, 6 months, 9 months, and 12 months
 - **Fixed rates**: Interest rates are locked in for the entire term
-- **Capital protection**: Your principal is secure
-- **Guaranteed returns**: You know exactly what you'll earn
+- **Capital protection**: Your principal is repaid at maturity, subject to the institution remaining solvent (the Depositor Compensation Scheme covers up to $100,000 per licensed deposit taker)
+- **Fixed returns**: You know the rate in advance, so you can calculate what you'll earn
 
 ### Benefits of Short-Term Term Deposits
 
@@ -20,7 +20,7 @@ Short-term term deposits are fixed-term savings products where you invest money 
 
 **Lower Opportunity Cost**: With shorter commitment periods, you have more frequent opportunities to reassess and reinvest at potentially better rates.
 
-**Emergency Fund Suitability**: Perfect for parking emergency funds where you need guaranteed access within 12 months while earning better returns than standard savings accounts.
+**Emergency Fund Use**: Commonly used for emergency funds where access is needed within 12 months, while earning more than most standard savings accounts. Note that funds are not freely accessible before maturity.
 
 ### Short-Term vs Long-Term Strategy Considerations
 
@@ -38,12 +38,15 @@ In rising rate environments, shorter terms allow you to reinvest at higher rates
 
 All interest earned on short-term term deposits is subject to Resident Withholding Tax (RWT) in New Zealand:
 
-- **10.5%**: Annual income up to $14,000
-- **17.5%**: Annual income $14,001 to $48,000
-- **30%**: Annual income $48,001 to $70,000
-- **33%**: Annual income over $70,000
+- **10.5%**: Annual income up to $15,600
+- **17.5%**: Annual income $15,601 to $53,500
+- **30%**: Annual income $53,501 to $78,100
+- **33%**: Annual income $78,101 to $180,000
+- **39%**: Annual income over $180,000
 
-**Important**: Ensure you provide the correct RWT rate to your bank to avoid tax complications at year-end.
+These are the rates that apply from 31 July 2024. If you do not nominate a rate, your bank deducts RWT at 33%; if you have not given the bank your IRD number, it deducts at 45%.
+
+**Important**: Ensure you provide the correct RWT rate to your bank to avoid tax complications at year-end. Check current rates on the <a href="https://www.ird.govt.nz/income-tax/withholding-taxes/resident-withholding-tax-rwt/using-the-right-rwt-tax-rate">IRD website</a> or talk to a tax adviser about your situation.
 
 ### Short-Term Deposit Strategies
 
@@ -111,7 +114,7 @@ While short-term deposits mature relatively quickly, you may still need early ac
 
 **Falling Rate Environment**: You may benefit from moving to longer terms before rates fall further, though short-term deposits provide flexibility to adapt.
 
-**Economic Uncertainty**: Short-term deposits provide a safe haven during uncertain times, with guaranteed returns and relatively quick access to funds.
+**Economic Uncertainty**: Short-term deposits offer a fixed return and relatively quick access to funds during uncertain times, though inflation can still erode the real value of that return.
 
 ### Short-Term Deposit Alternatives
 
@@ -142,7 +145,7 @@ A: Not usually. Longer terms typically offer higher rates as compensation for re
 A: Review at each maturity date (every 3-12 months) to compare current market rates and reassess your liquidity needs.
 
 **Q: Are short-term deposits good for building an emergency fund?**
-A: Yes, they're excellent for emergency funds as they provide guaranteed returns while maintaining relatively quick access to funds within 3-12 months.
+A: They are commonly used for this, because the rate is fixed and the money is accessible within 3-12 months. Bear in mind you generally cannot withdraw before maturity without losing interest, so keep some savings in an account you can access immediately.
 
 **Q: Should I spread my money across different banks for short-term deposits?**
 A: This can be beneficial for rate comparison and relationship diversification, though it may increase administrative complexity.
@@ -164,4 +167,4 @@ Short-term term deposits serve as an excellent bridge between savings accounts a
 - Alternative options for short-term funds
 - The administrative effort of regular reinvestment
 
-Short-term deposits provide security, guaranteed returns, and reasonable accessibility, making them a cornerstone of conservative financial planning in New Zealand.
+Short-term deposits offer a fixed return and reasonable accessibility, which is why they are a common component of conservative savings planning in New Zealand.

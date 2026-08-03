@@ -1,0 +1,108 @@
+---
+// Site-wide disclaimer page. Closes the second dead footer link and states, in
+// one place, the position the per-page <Disclaimer> notices summarise: this site
+// provides factual rate information (FMC Act Schedule 5 cl 7(a)) and does not
+// give regulated financial advice under s 431C.
+//
+// DRAFT — have a NZ financial services lawyer review before treating as final.
+import Layout from "../layouts/Layout.astro";
+import RelatedLinks from "../components/RelatedLinks.astro";
+import { ROOT_URL } from "../lib/schema";
+
+const pageUrl = `${ROOT_URL}/disclaimer/`;
+const title = "Disclaimer — TermDepositRates.co.nz";
+const description =
+  "TermDepositRates.co.nz provides factual term deposit rate information only and does not give financial advice. How our rates are sourced, and what to verify before investing.";
+
+const breadcrumbs = [
+  { name: "Home", url: `${ROOT_URL}/` },
+  { name: "Disclaimer", url: pageUrl },
+];
+
+const lastUpdated = "3 August 2026";
+---
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-gray-900 mb-2">Disclaimer</h1>
+    <p class="text-sm text-gray-500 mb-8">Last updated: {lastUpdated}</p>
+
+    <div class="prose prose-gray max-w-none">
+      <h2>We do not give financial advice</h2>
+      <p>
+        TermDepositRates.co.nz publishes factual information about term deposit interest rates offered
+        by New Zealand banks and other deposit takers. We rank those rates by interest rate — highest
+        first — and nothing more.
+      </p>
+      <p>
+        We are not a licensed financial advice provider and we do not give regulated financial advice.
+        Nothing on this site is a recommendation or an opinion that you should or should not acquire any
+        particular term deposit or other financial product. We do not know and do not take into account
+        your financial situation, goals, tax position or risk tolerance.
+      </p>
+      <p>
+        Where our tools describe a rate as the "best", "highest" or "top" rate, that describes a
+        <em>number</em> — the highest published rate in the data we hold for that term — not a judgment
+        that the product is suitable for you.
+      </p>
+      <p>
+        If you want advice about your own circumstances, speak to a licensed financial advice provider.
+        You can check whether someone is licensed on the
+        <a href="https://fsp-register.companiesoffice.govt.nz/">Financial Service Providers Register</a>.
+      </p>
+
+      <h2>Where our rates come from</h2>
+      <p>
+        Rates on this site are collected automatically once a day from publicly published rate data.
+        They are not supplied to us by the banks, and they are not live.
+      </p>
+      <p>
+        This means the rate you see here may differ from the rate a bank is currently offering. Rates
+        change without notice. Minimum deposits, fees, interest payment frequency, early-withdrawal
+        conditions and eligibility criteria vary between institutions and are not always reflected in
+        our tables.
+      </p>
+      <p>
+        <strong>Always confirm the current rate and full terms directly with the bank before investing.</strong>
+      </p>
+
+      <h2>Deposit protection</h2>
+      <p>
+        Since 1 July 2025, the Depositor Compensation Scheme protects up to $100,000 per depositor, per
+        licensed deposit taker, if that institution fails. It is administered by the Reserve Bank of New
+        Zealand under the Deposit Takers Act 2023. Amounts above $100,000 at any one institution are not
+        covered, and cover depends on the institution being a licensed deposit taker. Confirm the
+        position with your institution — see the
+        <a href="https://www.rbnz.govt.nz/dcs">Reserve Bank's Depositor Compensation Scheme page</a>.
+      </p>
+
+      <h2>Tax</h2>
+      <p>
+        Interest is taxable income in New Zealand. Any tax rates or examples on this site are general
+        information and may not reflect current rates or your circumstances. Check current guidance with
+        <a href="https://www.ird.govt.nz/">Inland Revenue</a> or a tax adviser.
+      </p>
+
+      <h2>Accuracy and liability</h2>
+      <p>
+        We take care to keep this site accurate, but we do not warrant that the information is complete,
+        current or error-free, and we do not cover every institution or every product in the market. To
+        the extent permitted by law, we are not liable for any loss arising from reliance on information
+        on this site.
+      </p>
+      <p>
+        Nothing in this disclaimer limits any right you have under the Fair Trading Act 1986 or other
+        legislation that cannot lawfully be excluded.
+      </p>
+
+      <h2>How we make money</h2>
+      <p>
+        This site is free to use. Where you give us your contact details through our
+        <a href="/best-rate-finder">rate finder</a>, we may share them with our partners as described in
+        our <a href="/privacy-policy">Privacy Policy</a>, and we may be paid for doing so. This does not
+        affect how we rank rates — our tables and tools are ordered by interest rate only.
+      </p>
+    </div>
+  </div>
+
+  <RelatedLinks exclude="/disclaimer" />
+</Layout>

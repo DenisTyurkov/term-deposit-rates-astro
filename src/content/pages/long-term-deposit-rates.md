@@ -30,7 +30,7 @@ Long-term term deposits are fixed-term savings products where you commit your mo
 **When Long-Term Makes Sense:**
 - You have funds you won't need for several years
 - You expect interest rates to fall or remain stable
-- You prefer guaranteed returns over market volatility
+- You prefer a fixed return over market volatility
 - You're saving for specific long-term goals
 - You want to simplify your investment management
 
@@ -41,10 +41,13 @@ Long-term deposits perform best when you lock in relatively high rates before th
 
 All interest earned on long-term term deposits is subject to Resident Withholding Tax (RWT) in New Zealand:
 
-- **10.5%**: Annual income up to $14,000
-- **17.5%**: Annual income $14,001 to $48,000
-- **30%**: Annual income $48,001 to $70,000
-- **33%**: Annual income over $70,000
+- **10.5%**: Annual income up to $15,600
+- **17.5%**: Annual income $15,601 to $53,500
+- **30%**: Annual income $53,501 to $78,100
+- **33%**: Annual income $78,101 to $180,000
+- **39%**: Annual income over $180,000
+
+These are the rates that apply from 31 July 2024. If you do not nominate a rate, your bank deducts RWT at 33%; if you have not given the bank your IRD number, it deducts at 45%. Check current rates on the <a href="https://www.ird.govt.nz/income-tax/withholding-taxes/resident-withholding-tax-rwt/using-the-right-rwt-tax-rate">IRD website</a> or talk to a tax adviser about your situation.
 
 **Important Considerations:**
 - RWT is deducted from interest payments throughout the term
@@ -107,7 +110,7 @@ Breaking long-term deposits typically involves significant penalties and should 
 
 **Notice Requirements**: Extended notice periods (often 31-90 days) are common for long-term deposit withdrawals.
 
-**Principal Protection**: Your original deposit remains secure, but interest earned may be forfeited or significantly reduced.
+**Principal Returned**: Breaking early normally costs you interest rather than principal — your original deposit is returned, but interest earned may be forfeited or significantly reduced.
 
 **Alternative Options**: Before breaking deposits, consider borrowing against the deposit or exploring partial withdrawal options where available.
 
@@ -117,7 +120,7 @@ Breaking long-term deposits typically involves significant penalties and should 
 
 **Falling Rate Environment**: Long-term deposits excel when rates decline, protecting your returns while others face lower reinvestment rates.
 
-**Economic Uncertainty**: Long-term deposits provide stability and guaranteed returns during volatile economic periods.
+**Economic Uncertainty**: Long-term deposits provide a fixed return during volatile economic periods, though a long fixed rate carries more inflation risk.
 
 **Inflation Considerations**: Ensure your locked-in rate adequately compensates for expected inflation over the deposit term.
 
@@ -184,7 +187,7 @@ A: This depends on income needs and risk tolerance. Retirees often prefer shorte
 
 Long-term term deposits serve as a cornerstone of conservative investment portfolios, particularly valuable for:
 
-- Guaranteed returns over extended periods
+- A fixed, known return over extended periods
 - Protection against falling interest rates
 - Goal-based savings with known timeframes
 - Risk-averse investors seeking capital protection

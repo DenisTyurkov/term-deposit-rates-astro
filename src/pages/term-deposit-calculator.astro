@@ -3,6 +3,7 @@ import { getEntry, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import Disclaimer from "../components/Disclaimer.astro";
 import { calculatorData } from "../lib/rates";
 import { longDateTime } from "../lib/format";
 import { webApplicationSchema, faqSchema, ROOT_URL } from "../lib/schema";
@@ -158,6 +159,8 @@ const Content = entry ? (await render(entry)).Content : null;
   </div>
 
   <Faq items={faqItems} heading="Term Deposit Calculator FAQs" />
+
+  <Disclaimer class="mb-12" />
 
   <RelatedLinks exclude="/term-deposit-calculator" />
 

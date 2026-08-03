@@ -23,7 +23,7 @@ const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString(
 const pageUrl = `${ROOT_URL}/term-deposit-rates-for-seniors/`;
 const title = `Term Deposit Rates for Seniors NZ ${monthLabel} — Compare the Best Rates`;
 const description =
-  "Compare the best term deposit (fixed deposit) rates for seniors and retirees across every major NZ bank. See standard published rates, choose monthly interest for income, and ask each bank about seniors offers. Updated daily.";
+  "Compare term deposit (fixed deposit) rates for seniors and retirees across major NZ banks, ranked highest first. See standard published rates, choose monthly interest for income, and ask each bank about seniors offers. Updated daily.";
 
 const faqItems = seniorsFaqItems();
 
@@ -48,8 +48,8 @@ const breadcrumbs = [
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">Term Deposit Rates for Seniors in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare the best term deposit (fixed deposit) interest rates for seniors and retirees
-          from every major NZ bank. Updated daily to help you secure dependable, predictable returns.
+          Compare term deposit (fixed deposit) interest rates for seniors and retirees across major
+          NZ banks, ranked highest first and updated daily.
         </p>
       </div>
       <BankLogoStrip parents={parents} />
@@ -71,7 +71,7 @@ const breadcrumbs = [
 
   <RateSummary
     heading="Highest term deposit rates in NZ for seniors, by term"
-    intro="The market-leading term deposit rate for each term length — suitable for retirees and seniors — updated daily from every major New Zealand bank."
+    intro="The highest published term deposit rate for each term length, updated daily. These are standard rates available to customers of any age — ask each bank whether a seniors or retiree offer also applies."
     leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
@@ -83,8 +83,9 @@ const breadcrumbs = [
 
         <p class="text-lg text-gray-600 mb-6">
           Term deposits are one of the most popular savings choices for New Zealand seniors and
-          retirees. They offer a fixed, guaranteed return with no exposure to share or property
-          market swings — useful when you're drawing on savings rather than building them. As of
+          retirees. They pay a fixed return with no exposure to share or property market swings —
+          useful when you're drawing on savings rather than building them, though the trade-offs are
+          inflation risk and money locked away for the term. As of
           {updatedMonthYear} we track rates from {stats.bankCount} institutions across {stats.termCount}
           terms, ranging from {stats.minRate.toFixed(2)}% to {stats.maxRate.toFixed(2)}%.
         </p>
@@ -93,15 +94,15 @@ const breadcrumbs = [
           <h3 class="font-semibold text-blue-900 mb-2">Is there a special "seniors" term deposit rate?</h3>
           <p class="text-sm text-blue-800">
             Mostly, no. Most NZ banks publish a single term deposit rate available to everyone,
-            regardless of age — so the smartest move is to compare every bank's standard rate (the
-            table above) and then ask your bank whether any seniors, retiree or over-65 offer applies.
-            A higher standard rate elsewhere usually beats a small loyalty bonus.
+            regardless of age. You can compare every bank's standard rate in the table above, and ask
+            your bank whether any seniors, retiree or over-65 offer applies to you — the published
+            rates here don't reflect offers that aren't advertised.
           </p>
         </div>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Why term deposits suit many retirees</h3>
         <p class="text-gray-600 mb-4"><strong>Certainty of return:</strong> your rate is locked in for the whole term, so you know exactly what you'll earn — helpful for budgeting in retirement.</p>
-        <p class="text-gray-600 mb-4"><strong>Capital stability:</strong> your principal isn't subject to market movements, unlike shares or managed funds.</p>
+        <p class="text-gray-600 mb-4"><strong>Capital stability:</strong> your principal isn't subject to market movements, unlike shares or managed funds. You still carry the credit risk of the institution — the Depositor Compensation Scheme covers up to $100,000 per depositor, per licensed deposit taker.</p>
         <p class="text-gray-600 mb-4"><strong>Regular income option:</strong> most banks let you take interest monthly or quarterly instead of at maturity, turning a deposit into a steady income stream.</p>
         <p class="text-gray-600 mb-4"><strong>Simplicity:</strong> term deposits (also called fixed deposits) are easy to understand, with no ongoing management fees.</p>
 

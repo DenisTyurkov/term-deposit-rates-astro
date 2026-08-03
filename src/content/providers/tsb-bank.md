@@ -33,4 +33,4 @@ Against the larger banks, TSB competes more on ownership and service than on sca
 
 ### Risks and considerations
 
-A fixed rate gives certainty but means you miss out if market rates climb during your term. If inflation runs above your rate, the real value of your return erodes. Your capital is committed for the full term, so factor in liquidity needs. Check the current deposit-protection arrangements that apply, and verify all specifics with TSB before investing.
+A fixed rate gives certainty but means you miss out if market rates climb during your term. If inflation runs above your rate, the real value of your return erodes. Your capital is committed for the full term, so factor in liquidity needs. Deposits with a licensed deposit taker are covered by the Depositor Compensation Scheme up to $100,000 per depositor, per institution; amounts above that are not. None of the above is financial advice — verify all specifics with TSB before investing.

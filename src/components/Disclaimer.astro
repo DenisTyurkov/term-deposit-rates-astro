@@ -1,0 +1,32 @@
+---
+// Site-wide "factual information, not financial advice" notice.
+//
+// Term deposits are financial advice products under the FMC Act (a debt security
+// per s 8(1)(a) -> financial product per s 7(1)(a)), so ranking them is only safe
+// while the site stays inside the Schedule 5 cl 7(a) exclusion: providing factual
+// information. Every rates page therefore states, in its own words, that it sorts
+// published rates by number rather than recommending a product to a reader.
+//
+// Wording deliberately mirrors the longer notices already inline on index.astro,
+// pie-term-deposit-rates.astro and term-deposit-rates-for-seniors.astro — those
+// predate this component and are left in place.
+interface Props {
+  /** Extra classes on the wrapper, e.g. spacing for a page that isn't in a section. */
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+<div class={`max-w-7xl mx-auto px-4 ${className}`}>
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+    <p class="text-xs text-gray-500">
+      <strong>Not financial advice:</strong> this page provides factual information only. It lists
+      publicly published term deposit rates ranked by interest rate, and does not take into account
+      your financial situation, goals or risk tolerance. Rates are collected once a day and may not
+      match a bank's current offer — confirm the rate, minimum deposit,
+      fees and break conditions directly with the bank before investing. Deposits with a licensed
+      deposit taker are covered by the Depositor Compensation Scheme up to $100,000 per depositor,
+      per institution; amounts above that are not. For advice about your own circumstances, speak to
+      a licensed financial advice provider.
+    </p>
+  </div>
+</div>

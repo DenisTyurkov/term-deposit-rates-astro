@@ -87,10 +87,21 @@ function initQuiz(): void {
     errorEl.classList.remove("hidden");
   }
 
-  function matchedRates(): FinderRate[] {
+  /**
+   * Top rates for the chosen term, filtered to banks this visitor can definitely
+   * meet the minimum for. `amountBound` is the LOWER bound of the selected band,
+   * so the filter is conservative — it can exclude a bank whose minimum the
+   * visitor actually clears. The subheading states that bound explicitly rather
+   * than claiming a precise match. `affordableOnly` is false when nothing passed
+   * the filter and we fell back to the unfiltered list, so the copy can say so
+   * instead of silently showing deposits the visitor may not qualify for.
+   */
+  function matchedRates(): { rates: FinderRate[]; affordableOnly: boolean } {
     const bucket = quizData.buckets[termBucket] || [];
     const affordable = bucket.filter((r) => r.minDeposit == null || r.minDeposit <= amountBound);
-    return (affordable.length ? affordable : bucket).slice(0, 3);
+    return affordable.length
+      ? { rates: affordable.slice(0, 3), affordableOnly: true }
+      : { rates: bucket.slice(0, 3), affordableOnly: false };
   }
 
   function renderResults(): void {
@@ -99,11 +110,14 @@ function initQuiz(): void {
     results.hidden = false;
 
     const termAnswer = (form.elements.namedItem("quiz_term_length") as HTMLInputElement).value;
-    resultsSub.textContent = quizData.updatedLabel
-      ? `Today's top ${termAnswer} rates for your deposit — updated ${quizData.updatedLabel}.`
-      : `Today's top ${termAnswer} rates for your deposit.`;
+    const { rates, affordableOnly } = matchedRates();
+    const bound = `$${amountBound.toLocaleString("en-NZ")}`;
+    const updated = quizData.updatedLabel ? ` Updated ${quizData.updatedLabel}.` : "";
 
-    const rates = matchedRates();
+    resultsSub.textContent = affordableOnly
+      ? `The highest published ${termAnswer} rates from banks with a minimum deposit of ${bound} or less, ranked by rate.${updated}`
+      : `No bank in this term range publishes a minimum deposit of ${bound} or less, so these are the highest published ${termAnswer} rates overall — check each minimum before applying.${updated}`;
+
     if (!rates.length) {
       resultsList.innerHTML = `
         <div class="text-center text-gray-500 py-8">
@@ -115,7 +129,7 @@ function initQuiz(): void {
       .map((r, index) => {
         const cardClass = index === 0 ? "border-green-200 bg-green-50" : "border-gray-200 bg-white";
         const rateClass = index === 0 ? "text-green-600" : "text-gray-900";
-        const label = index === 0 ? "Best match" : `#${index + 1}`;
+        const label = index === 0 ? "Highest rate" : `#${index + 1}`;
         const minDep = r.minDeposit != null ? `Min deposit $${r.minDeposit.toLocaleString("en-NZ")}` : "No stated minimum";
         return `
         <div class="border ${cardClass} rounded-lg p-4">

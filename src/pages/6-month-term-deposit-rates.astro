@@ -7,6 +7,7 @@ import RateFinderCta from "../components/RateFinderCta.astro";
 import RateSummary from "../components/RateSummary.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import Disclaimer from "../components/Disclaimer.astro";
 import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYear, monthYearShort } from "../lib/format";
 import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
@@ -23,7 +24,7 @@ const monthLabel = monthYearShort(data.latestScrapeAt ?? new Date().toISOString(
 const pageUrl = `${ROOT_URL}/6-month-term-deposit-rates/`;
 const title = `Best 6 Month Term Deposit Rates NZ ${monthLabel} — Compare All Banks`;
 const description =
-  "Compare the best 6 month term deposit (fixed deposit) rates across every major New Zealand bank. Find the highest 6-month rate for short-term savings. Updated daily.";
+  "Compare 6 month term deposit (fixed deposit) rates across major New Zealand banks, ranked highest first. Find the highest published 6-month rate. Updated daily.";
 
 const faqItems = termLengthFaqItems("6-month");
 
@@ -48,7 +49,7 @@ const breadcrumbs = [
       <div class="text-center mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">Best 6 Month Term Deposit Rates in New Zealand</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-          Compare 6 month term deposit (fixed deposit) rates from every major NZ bank, ranked highest first.
+          Compare 6 month term deposit (fixed deposit) rates from the major NZ banks we track, ranked highest first.
           Updated daily — a popular term for short-term savings goals.
         </p>
       </div>
@@ -103,6 +104,8 @@ const breadcrumbs = [
   </div>
 
   <Faq items={faqItems} heading="6 Month Term Deposit FAQs" />
+
+  <Disclaimer class="mb-12" />
 
   <RelatedLinks exclude="/6-month-term-deposit-rates" />
 </Layout>

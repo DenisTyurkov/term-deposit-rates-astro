@@ -8,6 +8,7 @@ import RateFinderCta from "../components/RateFinderCta.astro";
 import RateSummary from "../components/RateSummary.astro";
 import Faq from "../components/Faq.astro";
 import RelatedLinks from "../components/RelatedLinks.astro";
+import Disclaimer from "../components/Disclaimer.astro";
 import { matrixPageData, logoStripParents, termLeaders } from "../lib/rates";
 import { monthYearShort } from "../lib/format";
 import { collectionPageSchema, itemListSchema, faqSchema, ROOT_URL } from "../lib/schema";
@@ -72,7 +73,7 @@ const Content = entry ? (await render(entry)).Content : null;
 
   <RateSummary
     heading="Highest short-term deposit rates in NZ, by term"
-    intro="The market-leading rate for each short term (1 to 12 months), updated daily from every major New Zealand bank."
+    intro="The highest published rate for each short term (1 to 12 months), across the major New Zealand banks we track. Collected once a day from published rates."
     leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
@@ -86,6 +87,8 @@ const Content = entry ? (await render(entry)).Content : null;
   </div>
 
   <Faq items={faqItems} heading="Short-Term Deposit FAQs" />
+
+  <Disclaimer class="mb-12" />
 
   <RelatedLinks exclude="/short-term-deposit-rates" />
 </Layout>

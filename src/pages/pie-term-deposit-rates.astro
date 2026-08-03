@@ -70,7 +70,7 @@ const jsonLd = [
 
   <RateSummary
     heading="Highest PIE term deposit rates in NZ, by term"
-    intro="The market-leading PIE (Portfolio Investment Entity) term deposit rate for each term length, updated daily from every major New Zealand bank."
+    intro="The highest published PIE (Portfolio Investment Entity) term deposit rate for each term length, across the New Zealand banks that offer PIE deposits. Collected once a day from published rates."
     leaders={leaders}
     latestScrapeAt={data.latestScrapeAt}
   />
@@ -105,13 +105,13 @@ const jsonLd = [
         )}
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">What Are PIE Term Deposits and How Do They Work?</h3>
-        <p class="text-gray-600 mb-4">PIE (Portfolio Investment Entity) term deposits are structured as investments in a managed fund that holds term deposits. While the underlying investment is still a term deposit with guaranteed returns, the PIE structure can provide tax advantages for many investors.</p>
+        <p class="text-gray-600 mb-4">PIE (Portfolio Investment Entity) term deposits are structured as investments in a managed fund that holds term deposits. While the underlying investment is still a term deposit paying a fixed rate, the PIE structure can provide tax advantages for many investors.</p>
         <p class="text-gray-600 mb-4">Like traditional term deposits, PIE term deposits offer fixed interest rates for predetermined periods. However, the tax treatment differs, potentially resulting in lower effective tax rates and higher after-tax returns for eligible investors.</p>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">PIE Tax Benefits Explained</h3>
         <p class="text-gray-600 mb-4">The main advantage of PIE term deposits lies in their tax treatment:</p>
         <p class="text-gray-600 mb-4"><strong>Prescribed Investor Rate (PIR)</strong>: PIEs are taxed at your PIR, which may be lower than your marginal tax rate. PIRs are capped at 28%, even if your income tax rate is 33% or 39%.</p>
-        <p class="text-gray-600 mb-4"><strong>No Additional Tax</strong>: Unlike regular term deposits where interest is added to your taxable income, PIE investments don't create additional tax obligations in your annual return.</p>
+        <p class="text-gray-600 mb-4"><strong>Usually No Square-Up</strong>: Unlike regular term deposits where interest is added to your taxable income, PIE income generally doesn't need to be included in your annual return — provided you have given the provider the correct PIR. If you use a PIR that is too low, IRD will assess the shortfall and you will have tax to pay.</p>
         <p class="text-gray-600 mb-4"><strong>Tax Efficiency</strong>: For investors on higher tax rates, PIE structures can result in significant tax savings compared to traditional term deposits.</p>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Who Benefits Most from PIE Term Deposits?</h3>
@@ -147,8 +147,8 @@ const jsonLd = [
               </tr>
               <tr>
                 <td class="px-4 py-3 font-medium text-gray-900">Security</td>
-                <td class="px-4 py-3 text-gray-600">Principal guaranteed</td>
-                <td class="px-4 py-3 text-gray-600">Principal guaranteed</td>
+                <td class="px-4 py-3 text-gray-600">Principal repaid at maturity; DCS cover up to $100,000 per licensed deposit taker</td>
+                <td class="px-4 py-3 text-gray-600">Same underlying deposit; confirm DCS cover with the provider, as it depends on how the PIE is structured</td>
               </tr>
               <tr class="bg-gray-50">
                 <td class="px-4 py-3 font-medium text-gray-900">Interest Rate</td>
@@ -189,6 +189,11 @@ const jsonLd = [
             <li>• <strong>PIE term deposit (28% PIR):</strong> $1,620.00 after tax</li>
             <li>• <strong>Annual tax saving:</strong> $112.50</li>
           </ul>
+          <p class="text-xs text-gray-500 mt-3">
+            Illustration only. It assumes both products pay the same 4.50% headline rate — in practice PIE
+            and traditional rates from the same bank often differ, which can reduce or reverse the benefit.
+            Compare after-tax returns using each product's actual rate.
+          </p>
         </div>
 
         <h3 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Getting Started with PIE Term Deposits</h3>
@@ -215,7 +220,7 @@ const jsonLd = [
         <p class="text-gray-600 mb-4">You cannot directly convert existing term deposits to PIE structures. You would need to wait for maturity or break your current deposit and reinvest in a PIE term deposit.</p>
 
         <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Are PIE term deposits as secure as regular term deposits?</h3>
-        <p class="text-gray-600 mb-4">PIE term deposits typically offer the same principal protection as traditional term deposits when invested with the same institution. However, verify the specific structure and guarantees with your chosen provider.</p>
+        <p class="text-gray-600 mb-4">The underlying deposit sits with the same institution, so the credit exposure is much the same. Whether Depositor Compensation Scheme cover applies can depend on how the PIE is structured, so confirm that — and the specific terms — with your chosen provider before investing.</p>
 
         <h3 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Do I need to declare PIE investments in my tax return?</h3>
         <p class="text-gray-600 mb-4">Generally, PIE investments don't require declaration in your annual tax return as tax is calculated and paid at the PIE level. However, you should keep records of your investments and consult current IRD guidelines.</p>
